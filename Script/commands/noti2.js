@@ -4,7 +4,7 @@ module.exports.config = {
  'name': "noti2",
  'version': "1.0.0",
  'hasPermssion': 0x2,
- 'credits': "MAHBUB SHAON",
+ 'credits': "ZAKARIYA",
  'description': '',
  'commandCategory': "sandnoto",
  'usages': "[msg]",
