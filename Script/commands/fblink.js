@@ -2,7 +2,7 @@ module.exports.config = {
 	name: "fblink",
 	version: "1.0.0",
 	hasPermssion: 0,
-	credits: "Shahadat SAHU",
+	credits: "ZAKARIYA",
 	description: "Get linkfb.",
 	commandCategory: "Generate FB id link",
 	cooldowns: 5
