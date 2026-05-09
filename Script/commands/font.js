@@ -2,7 +2,7 @@ module.exports.config = {
   name: "font",
   version: "1.0.0",
   hasPermssion: 0,
-  credits: "SHAHADAT SAHU",
+  credits: "ZAKARIYA",
   description: "Convert text into fonts",
   commandCategory: "Others",
   usages: "<1-10> <text>",
@@ -30,16 +30,16 @@ module.exports.run = async ({ event, api, args }) => {
 `┏━━━━━━━━━━━━━━━━━━━┓
 ┃    🌸AVAILABLE FONTS🌸
 ┣━━━━━━━━━━━━━━━━━━━┫
-┃ 1) 𝚂𝙷𝙰𝙷𝙰𝙳𝙰𝚃 𝚂𝙰𝙷𝚄
-┃ 2) ＳＨＡＨＡＤＡΤ ＳＡＨＵ
-┃ 3) 🅂🄷🄰🄷🄰🄳🄰🅃 🅂🄰🄷🅄
-┃ 4) 🅢🅗🅐🅗🅐🅓🅐🅣 🅢🅐🅗🅤
-┃ 5) 🆂🅷🅰🅷🅰🅳🅰🆃 🆂🅰🅷🆄
-┃ 6) 𝙎 𝙃 𝘼 𝙃 𝘼 𝘿 𝘼 𝙏 𝙎 𝘼 𝙃 𝙐
-┃ 7) 𝗦𝗛𝗔𝗛𝗔𝗗𝗔𝗧 𝗦𝗔𝗛𝗨
-┃ 8) 𝐒𝐇𝐀𝐇𝐀𝐃𝐀𝐓 𝐒𝐀𝐇𝐔
-┃ 9) 𝖲𝖧𝖠𝖧𝖠𝖣𝖠𝖳 𝖲𝖠𝖧𝖴
-┃10) 𝕊ℍ𝔸ℍ𝔸𝔻𝔸𝕋 𝕊𝔸ℍ𝕌
+┃ 1) Zaksriya
+┃ 2) 𝓩𝓪𝓴𝓼𝓻𝓲𝔂𝓼
+┃ 3) 𝘇𝗮𝗸𝗮𝗿𝗶𝘆𝗮
+┃ 4) 𝘻𝘢𝘬𝘢𝘳𝘪𝘺𝘢
+┃ 5) 𝕫𝕒𝕜𝕒𝕣𝕚𝕪𝕒
+┃ 6) ᴢᴀᴋᴀʀɪʏᴀ
+┃ 7) 𝚣𝚊𝚔𝚊𝚛𝚒𝚢𝚊
+┃ 8) 𝐙𝐚𝐤𝐚𝐫𝐢𝐲𝐚
+┃ 9) 🅉🄰🄺🄰🅁🄸🅈🅂
+┃10) 🅩︎🅐︎🅚︎🅐︎🅡︎🅘︎🅨︎🅐︎
 ┣━━━━━━━━━━━━━━━━━━━┫
 ┃Use: Reply font <1-10>
 ┗━━━━━━━━━━━━━━━━━━━┛`,
