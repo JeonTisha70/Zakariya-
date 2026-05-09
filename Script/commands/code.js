@@ -5,7 +5,7 @@ module.exports.config = {
     name: "code",
     version: "1.0.0",
     hasPermssion: 2,
-    credits: "SHAHADAT SAHU",
+    credits: "ZAKARIYA",
     description: "Simple file reader",
     commandCategory: "System",
     usages: "[list/list all/fileName]",
