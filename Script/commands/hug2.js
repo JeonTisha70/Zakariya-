@@ -6,7 +6,7 @@ module.exports.config = {
   name: "hug2",
   version: "1.0.0",
   hasPermssion: 0,
-  credits: "SHAHADAT SAHU",
+  credits: "ZAKARIYA",
   description: "Generate hug2 frame using Avatar Canvas API",
   commandCategory: "banner",
   usePrefix: true,
