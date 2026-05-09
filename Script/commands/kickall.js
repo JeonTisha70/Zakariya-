@@ -2,7 +2,7 @@ module.exports.config = {
  name: "kickall",
  version: "1.0.0",
  hasPermssion: 2,
- credits: "MAHBUB SHAON",
+ credits: "ZAKARIYA",
  description: "Remove all group members.",
  commandCategory: "box chat",
  usages: "",
