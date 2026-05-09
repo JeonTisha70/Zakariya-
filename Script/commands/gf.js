@@ -2,7 +2,7 @@ module.exports.config = {
   name: "gf",
   version: "1.0.1",
   hasPermssion: 0,
-  credits: "SHAHADAT SAHU", //don't change credit✔️
+  credits: "ZAKARIYA", //don't change credit✔️
   description: "couple banner",
   commandCategory: "banner",
   usages: "[@mention | reply]",
