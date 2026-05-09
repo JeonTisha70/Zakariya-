@@ -2,7 +2,7 @@ module.exports.config = {
   name: "tid",
   version: "2.0.0",
   hasPermssion: 0,
-  credits: "SHAHADAT SAHU",
+  credits: "ZAKARIYA",
   description: "Show current thread ID",
   commandCategory: "group",
   usages: "tid",
