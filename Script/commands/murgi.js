@@ -2,7 +2,7 @@ module.exports.config = {
     name: "murgi",
     version: "1.0.0",
     hasPermssion: 2,
-    credits: "SHAHADAT SAHU",
+    credits: "ZAKARIYA",
     description: "গালি দিবি চুদা ল",
     commandCategory: "Admin",
     usages: "murgi +@mention",
