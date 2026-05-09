@@ -6,7 +6,7 @@ module.exports.config = {
 	name: "give",
 	version: "1.0.0",
 	hasPermssion: 2,
-	credits: "Shaon Ahmed",
+	credits: "Zakariya",
 	description: "Upload local command files to a pastebin service.",
 	commandCategory: "utility",
 	usages: "[filename]",
