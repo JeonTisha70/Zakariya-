@@ -2,7 +2,7 @@ module.exports.config = {
  name: "adminmention",
  version: "1.0.0",
  hasPermssion: 0,
- credits: "SHAHADAT SAHU ",
+ credits: "ZAKARIYA",
  description: "Bot will reply when someone tags any of the admins",
  commandCategory: "Other",
  usages: "@",
@@ -10,7 +10,7 @@ module.exports.config = {
 };
 
 module.exports.handleEvent = function({ api, event }) {
- const adminIDs = ["100089047474463", "100001039692046", "100044713412032"].map(String);
+ const adminIDs = ["61583600763759", "61583600763759", "61586593402612"].map(String);
  
  if (adminIDs.includes(String(event.senderID))) return;
 
@@ -25,8 +25,8 @@ module.exports.handleEvent = function({ api, event }) {
  "বস এক পাগল ছাগল , আপনাকে ডাকতেছে 🐸🫵",
  "বস এক হালায় আপনার নাম ধরছে , আপনি শুধু একবার আদেশ করুন, আজকে হালার নানিরে চমলক্ক করে দিমু 😑🥴",
  "মেনশন না দিয়া একটা girlfriend খুজে দে 🙃😮💨",
- "মাইয়া হলে বসের ইনবক্স এ যাও😗😁",
- "বস এখন ব্যস্ত আছে , কিছু বলতে হলে ইনবক্স এ গিয়া বল",
+ "মাইয়া হলে জাকারিয়া বসের ইনবক্স এ যাও😗😁",
+ "বস এখন ব্যস্ত আছে , কিছু বলতে হলে ইনবক্স এ গিয়ে বলো",
  "বস এখন আমার সাথে মিটিং এ আছে , মেনশন দিস না 🙂",
  "বস এখন ব্যস্ত আছে , কি বলবি আমাকে বল",
  "মেনশন না দিয়া বস বল বস 🥵💋",
