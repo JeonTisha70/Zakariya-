@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const apiList = "https://raw.githubusercontent.com/shahadat-sahu/SAHU-API/refs/heads/main/SAHU-API.json";
+const apiList = "https://raw.githubusercontent.com/ZAKARIYA/JIYEM-API/refs/heads/main/JIYEM-API.json";
 
 const getMainAPI = async () => (await axios.get(apiList)).data.simsimi;
 
@@ -21,46 +21,46 @@ module.exports.handleEvent = async function ({ api, event }) {
   const msg = body.toLowerCase().trim();
 
   const responses = {
-    "miss you": "অরেক বেডারে Miss না করে xan মেয়ে হলে বস সাহু রে হাঙ্গা করো😶👻😘",
-    "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু সাহু বস বেশি করে 😏💖",
+    "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো😶👻😘",
+    "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
     "kiss de": "কিস দিস না তোর মুখে দূর গন্ধ কয়দিন ধরে দাঁত ব্রাশ করিস নাই🤬",
     "👍": "সর এখান থেকে লাইকার আবাল..!🐸🤣👍⛏️",
     "hi": "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵",
     "bc": "SAME TO YOU😊",
-    "pro": "Khud k0o KYa LeGend SmJhTi Hai 😂",
+    "pro": "হুমম তোমার বান্ধবী চোশমা ওয়ালি 😂",
     "good morning": "GOOD MORNING দাত ব্রাশ করে খেয়ে নেও😚",
-    "good night": "Sweet Dream babu… তবে আগে সাহু বস কে GN বলে নিও 😏💤",
-    "tor ball": "~ এখনো বাল উঠে নাই নাকি তোমার?? 🤖",
-    "shahadat": "উনি এখন কাজে বিজি আছে কি বলবেন আমাকে বলতে পারেন..!😘",
-    "owner": "‎[𝐎𝐖𝐍𝐄𝐑:☞ SHAHADAT SAHU ☜\nFacebook: https://www.facebook.com/profile.php?id=100044713412032\nWhatsApp: +8801882333052",
-    "admin": "He is SHAHADAT SAHU তাকে সবাই Admin SAHU হিসেবে চিনে😘☺️",
+    "good night": "Sweet Dream babu… তবে আগে জাকারিয়া বস কে GN বলে নিও 😏💤",
+    "tor ball": "~ এখনো সময় আছে ভালো হয়ে যাও 🤧🤖",
+    "Jakariya": "উনি এখন কাজে বিজি আছে কি বলবেন আমাকে বলতে পারেন..!😘",
+    "owner": "‎[𝐎𝐖𝐍𝐄𝐑:☞ ZAKARIYA JIYEM ☜\nFacebook:https://www.facebook.com/profile.php?id=61583600763759\nWhatsApp: +8801908488295",
+    "admin": "He is ZAKARIYA তাকে সবাই Admin ARIYAN হিসেবে চিনে😘☺️",
     "babi": "এ তো হাছিনা হে মেরে দিলকি দারকান হে মেরি জান হে😍.",
     "chup": "তুই চুপ চুপ কর পাগল ছাগল",
     "Assalamualaikum": "Walaikumassalam❤️‍🩹",
-    "fork": "https://github.com/shahadat-sahu/SHAHADAT-CHAT-BOT.git",
+    "fork": "https://github.com/Zakariya jiyem/ZAKARIYA-CHAT-BOT.git",
     "kiss me": "তুমি পঁচা তোমাকে কিস দিবো না 🤭",
-    "thanks": "এতো ধন্যবাদ না দিয়ে আমার বস সাহু রে তোর গার্লফ্রেন্ড টা দিয়ে দে..!🐸🥵",
-    "i love you": "মেয়ে হলে আমার বস সাহু এর ইনবক্সে এখুনি গুঁতা দিন🫢😻",
-    "love you": "ভালোবাসা নামক আবলামী করতে চাইলে Boss সাহু এর ইনবক্সে গুতা দিন 😘",
-    "by": "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাবি..!🌚🌶️",
-    "ami shahadat": "হ্যা বস কেমন আছেন..?☺️",
+    "thanks": "এতো ধন্যবাদ না দিয়ে মেয়ে হলে আমার বস জাকারিয়ার গার্লফ্রেন্ড হয়ে যাও ছেলে হলে তোমার গালফ্রেন্ড দিয়ে দেও..!🐸🥵",
+    "i love you": "মেয়ে হলে আমার বস জাকারিয়া এর ইনবক্সে এখুনি গুঁতা দেও🫢😻",
+    "love you": "ভালোবাসা নামক আবলামী করতে চাইলে Boss জাকারিয়া এর ইনবক্সে গুতা দিন 😘",
+    "by": "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাস..!🌚🌶️",
+    "ami Zakariya": "হ্যা বস কেমন আছেন..?☺️",
     "bot er baccha": "আমার বাচ্চা তো তোমার গার্লফ্রেন্ডের পেটে..!!🌚⛏️",
-    "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐡𝐚𝐡𝐚𝐝𝐚𝐭 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭💖",
+    "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚💖",
     "pic de": "এন থেকে সর দুরে গিয়া মর😒",
-    "cudi": "এত চোদা চুদি করস কেনো..!🥱🌝🌚",
+    "cudi": "কিছু কইলাম না ভালো হয়ে গেছি আমি..!🥱🌝🌚",
     "bal": "রাগ করে না সোনা পাখি 🥰",
     "heda": "এতো রাগ শরীরের জন্য ভালো না 🥰",
     "boda": "ভাই তুই এত হাসিস না..!🌚🤣",
-    "kire ki koros": "তোমার কথা ভাবতে ছি জানু 😚",
-    "ki koros": "বস সাহু এর সাথে প্রেমে ব্যস্ত আছি 😏💘",
-    "kire bot": "হ্যাঁ সব কেমন আছেন আপনার ওই খানে উম্মাহ 😘😽🙈",
-    "valo aso": "হ্যাঁ রে প্রিও, বস সাহু এর দোয়ায় ভালো আছি 😌💞",
+    "kire ki kro": "তোমার কথা ভাবতে ছি জানু 😚",
+    "ki kro": "বস জাকারিয়া এর সাথে প্রেমে ব্যস্ত আছি 😏💘",
+    "kire bot": "হ্যাঁ সব কেমন আছেন আপনার গালে উম্মাহ 😘😽🙈",
+    "valo aco": "হ্যাঁ রে প্রিও, বস জাকারিয়া এর দোয়ায় ভালো আছি 😌💞",
     "pagol": "হুম পাগল, কিন্তু তোমারই পাগল 😏😂",
-    "breakup": "চিন্তা করিস না… সাহু বস তো আছেই তোকে নতুন জন দিয়া দিবে 😎🔥",
-    "tui ke": "আমি তোর বস সাহু এর ChatBot 😏",
-    "umm": "এতো Umm কেনো জানু… কিছু বলবা? 😉",
+    "breakup": "চিন্তা করিস না… জাকারিয়া বস তো আছেই তোকে নতুন জন দিয়া দিবে 😎🔥",
+    "tui ke": "আমি তোর বস জাকারিয়া এর বান্ধবী 😏",
+    "ummmah": "এতো Ummmah কেনো জানু… কিছু বলবা? 😉",
     "hmm": "Hmmm কিসের হুমম জানু 🥵",
-    "love": "Love করলে সরাসরি সাহু বস কে বল জানু 😻🔥"
+    "love": "Love করলে সরাসরি জাকারিয়া বস কে বল জানু 😻🔥"
   };
 
   if (!responses[msg]) return;
