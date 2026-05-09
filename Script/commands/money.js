@@ -2,7 +2,7 @@ module.exports.config = {
     name: "money",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "SHAHADAT SAHU",
+    credits: "Zakariya",
     description: "Lightweight economy system",
     commandCategory: "economy",
     usages: "",
