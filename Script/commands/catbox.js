@@ -7,7 +7,7 @@ module.exports.config = {
  name: "catbox",
  version: "1.0.0",
  hasPermssion: 0,
- credits: "ULLASH",
+ credits: "JIYEM",
  description: "Upload media to Catbox",
  commandCategory: "media",
  usages: "[reply to image/video/audio]",
