@@ -260,9 +260,9 @@ const greetings = [
 
 
  if (
- raw === "baby" || raw === "bot" || raw === "bby" ||
- raw === "jan" || raw === "xan" || raw === "জান" ||
- raw === "বট" || raw === "বেবি"
+ raw === "Baby" || raw === "Bot" || raw === "bby" ||
+ raw === "Jan" || raw === "xan" || raw === "বেবি" ||
+ raw === "জান" || raw === "বট" || raw === "পাগলী" ||
  ) {
  const randomReply = greetings[Math.floor(Math.random() * greetings.length)];
  return api.sendMessage(randomReply, event.threadID, (err, info) => {
