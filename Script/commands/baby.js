@@ -250,19 +250,14 @@ const greetings = [
         "-দেশের সব কিছুই চুরি হচ্ছে-🙄-শুধু আমার বস জাকারিয়া এর মনটা ছাড়া-🥴😑😏",
         "-🫵তোমারে প্রচুর ভাল্লাগে-😽-সময় মতো প্রপোজ করমু বুঝছো-🔨😼-ছিট খালি রাইখো- 🥱🐸🥵",
         "-আজ থেকে আর কাউকে পাত্তা দিমু না -!😏-কারণ আমি ফর্সা হওয়ার ক্রিম কিনছি -!🙂🐸",
-        "-আলহামদুলিল্লাহ আমি ভালো আছি 🥰-তুমি কেমন আছো..?😒",
-        "-আমি তোমার কথা ভাবতেছি😊😊- তুমি কি করো..?",
-        "-হ্যাঁ - তুমি খাইছো 😟",
-       "- আমার বাসা রংপুর 🙂-তোমার বাসা কোথায় 🤨🤨",
-       "-আমিও তোমাকে অনেক ভালোবাসি 😘😘",
-       "-আমার নাম সিনথিয়া 🫣-তোমার নাম কি..?",
+        "-আলহামদুলিল্লাহ আমি ভালো আছি 🥰-তুমি কেমন আছো.
       ];
 
 
  if (
  raw === "Baby" || raw === "Bot" || raw === "bby" ||
  raw === "Jan" || raw === "xan" || raw === "বেবি" ||
- raw === "জান" || raw === "বট" || raw === "পাগলী" ||
+ raw === "জান" || raw === "বট" ||
  ) {
  const randomReply = greetings[Math.floor(Math.random() * greetings.length)];
  return api.sendMessage(randomReply, event.threadID, (err, info) => {
@@ -279,7 +274,7 @@ const greetings = [
 
  if (
  raw.startsWith("baby ") || raw.startsWith("bot ") || raw.startsWith("bby ") ||
- raw.startsWith("jan ") || raw.startsWith("xan ") || raw. startsWith("পাগলী")||
+ raw.startsWith("jan ") || raw.startsWith("xan ") || 
  raw.startsWith("জান ") || raw.startsWith("বট ") || raw.startsWith("বেবি ")
  ) {
  const query = raw.replace(/^baby\s+|^bot\s+|^bby\s+|^jan\s+|^xan\s+|^জান\s+|^বট\s+|^বেবি\s+/i, "").trim();
