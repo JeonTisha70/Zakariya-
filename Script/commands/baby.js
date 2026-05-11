@@ -279,7 +279,7 @@ const greetings = [
 
  if (
  raw.startsWith("baby ") || raw.startsWith("bot ") || raw.startsWith("bby ") ||
- raw.startsWith("jan ") || raw.startsWith("xan ") ||
+ raw.startsWith("jan ") || raw.startsWith("xan ") || raw. startsWith("পাগলী")||
  raw.startsWith("জান ") || raw.startsWith("বট ") || raw.startsWith("বেবি ")
  ) {
  const query = raw.replace(/^baby\s+|^bot\s+|^bby\s+|^jan\s+|^xan\s+|^জান\s+|^বট\s+|^বেবি\s+/i, "").trim();
