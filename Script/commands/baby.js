@@ -1,102 +1,162 @@
 const axios = require("axios");
 
 const apiList =
-  "https://raw.githubusercontent.com/ZAKARIYA/JIYEM-API/refs/heads/main/JIYEM-API.json";
+  "https://raw.githubusercontent.com/shahadat-sahu/SAHU-API/refs/heads/main/SAHU-API.json";
 
 const getMainAPI = async () => {
-  const data = await axios.get(apiList);
-  return data.data.simsimi;
+  const res = await axios.get(apiList);
+  return res.data.simsimi;
 };
 
 module.exports.config = {
-  name: "autoreplybot",
-  version: "3.0.0",
+  name: "baby",
+  version: "2.0.0",
   hasPermssion: 0,
   credits: "ZAKARIYA",
-  description: "Auto reply with simsimi",
+  description: "Cute Baby Chat Bot",
   commandCategory: "chat",
-  usePrefix: false,
-  cooldowns: 0
+  usages: "[text]",
+  cooldowns: 0,
+  usePrefix: false
 };
 
-const responses = {
-  "hi": "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵",
-  "hello": "হ্যালো জানু 😘",
-  "good morning": "GOOD MORNING 😚",
-  "good night": "Sweet Dream 😴💖",
-  "assalamualaikum": "ওয়ালাইকুমুস সালাম ❤️",
-  "hmm": "Hmmm কিসের হুমম জানু 🥵",
-  "love": "Love করলে সরাসরি জাকারিয়া বস কে বল 😻🔥",
-  "i love you": "মেয়ে হলে বস জাকারিয়া এর ইনবক্সে যাও 😻",
-  "kiss me": "তুমি পঁচা তোমাকে কিস দিবো না 🤭",
-  "thanks": "Welcome জানু 😘",
-  "owner":
-    "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA JIYEM ☜\nFacebook: https://facebook.com/profile.php?id=61583600763759",
-  "admin": "Admin হচ্ছে ZAKARIYA 😘",
-  "ki kro": "তোমার কথা ভাবতেছি 😘",
-  "pagol": "হুম পাগল 😹",
-  "tui ke": "আমি জাকারিয়া বসের বট 😎",
-  "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚💖"
-};
+// Random Reply List
+const greetings = [
+  "হুম জানু বলো 😘",
+  "এতো ডাকো কেনো 🙈",
+  "বলো কি করতে পারি তোমার জন্য 😌",
+  "আমি বস জাকারিয়ার সাথে বিজি আছি 😏",
+  "আরে জান বলো 😚",
+  "তোমারে অনেক ভালোবাসি 🥰",
+  "হুম শুনতেছি 😼",
+  "ডাকছো কেনো জানু 🤭",
+  "বলো বাবু 💖",
+  "উম্মাহ 😘"
+];
 
-module.exports.handleEvent = async function ({ api, event }) {
+// Handle Event
+module.exports.handleEvent = async function ({
+  api,
+  event,
+  Users
+}) {
   try {
-    const { threadID, messageID, body, senderID } = event;
+    const { threadID, messageID, senderID, body } = event;
 
     if (!body) return;
 
-    const msg = body.toLowerCase().trim();
-
-    if (!responses[msg]) return;
+    const raw = body.toLowerCase().trim();
 
     if (!global.client.handleReply)
       global.client.handleReply = [];
 
-    return api.sendMessage(
-      responses[msg],
-      threadID,
-      (err, info) => {
-        if (err) return;
+    const senderName = await Users.getNameUser(senderID);
 
-        global.client.handleReply.push({
-          name: module.exports.config.name,
-          messageID: info.messageID,
-          author: senderID
-        });
-      },
-      messageID
-    );
+    const simsim = await getMainAPI();
+
+    // Single Call Replies
+    if (
+      raw === "baby" ||
+      raw === "bot" ||
+      raw === "bby" ||
+      raw === "jan" ||
+      raw === "xan" ||
+      raw === "বেবি" ||
+      raw === "জান" ||
+      raw === "বট"
+    ) {
+      const msg =
+        greetings[Math.floor(Math.random() * greetings.length)];
+
+      return api.sendMessage(
+        msg,
+        threadID,
+        (err, info) => {
+          if (!err) {
+            global.client.handleReply.push({
+              name: module.exports.config.name,
+              messageID: info.messageID,
+              author: senderID
+            });
+          }
+        },
+        messageID
+      );
+    }
+
+    // Prefix Chat
+    if (
+      raw.startsWith("baby ") ||
+      raw.startsWith("bot ") ||
+      raw.startsWith("bby ") ||
+      raw.startsWith("jan ") ||
+      raw.startsWith("xan ") ||
+      raw.startsWith("বেবি ") ||
+      raw.startsWith("বট ") ||
+      raw.startsWith("জান ")
+    ) {
+      const query = raw.replace(
+        /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i,
+        ""
+      );
+
+      if (!query) return;
+
+      const res = await axios.get(
+        `${simsim}/simsimi?text=${encodeURIComponent(
+          query
+        )}&senderName=${encodeURIComponent(senderName)}`
+      );
+
+      const reply = Array.isArray(res.data.response)
+        ? res.data.response[0]
+        : res.data.response;
+
+      return api.sendMessage(
+        reply,
+        threadID,
+        (err, info) => {
+          if (!err) {
+            global.client.handleReply.push({
+              name: module.exports.config.name,
+              messageID: info.messageID,
+              author: senderID
+            });
+          }
+        },
+        messageID
+      );
+    }
   } catch (e) {
     console.log(e);
   }
 };
 
+// Handle Reply
 module.exports.handleReply = async function ({
   api,
   event,
+  Users,
   handleReply
 }) {
   try {
     if (event.senderID !== handleReply.author) return;
 
+    const senderName = await Users.getNameUser(
+      event.senderID
+    );
+
     const text = event.body;
 
     if (!text) return;
 
-    const base = await getMainAPI();
+    const simsim = await getMainAPI();
 
-    const link =
-      `${base}/simsimi?text=${encodeURIComponent(text)}`;
-
-    const res = await axios.get(link);
-
-    if (!res.data || !res.data.response) {
-      return api.sendMessage(
-        "🙂 পরে আবার বলো",
-        event.threadID,
-        event.messageID
-      );
-    }
+    const res = await axios.get(
+      `${simsim}/simsimi?text=${encodeURIComponent(
+        text
+      )}&senderName=${encodeURIComponent(senderName)}`
+    );
 
     const reply = Array.isArray(res.data.response)
       ? res.data.response[0]
@@ -105,17 +165,34 @@ module.exports.handleReply = async function ({
     return api.sendMessage(
       reply,
       event.threadID,
+      (err, info) => {
+        if (!err) {
+          global.client.handleReply.push({
+            name: module.exports.config.name,
+            messageID: info.messageID,
+            author: event.senderID
+          });
+        }
+      },
       event.messageID
     );
-  } catch (err) {
-    console.log(err);
-
+  } catch (e) {
     return api.sendMessage(
-      "🙂 API busy আছে পরে বলো",
+      "🙂 পরে আবার বলো",
       event.threadID,
       event.messageID
     );
   }
 };
 
-module.exports.run = async function () {};
+// Run Command
+module.exports.run = async function ({
+  api,
+  event
+}) {
+  return module.exports.handleEvent({
+    api,
+    event,
+    Users: global.Users
+  });
+};
