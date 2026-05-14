@@ -10,7 +10,7 @@ const getMainAPI = async () => {
 
 module.exports.config = {
   name: "baby",
-  version: "2.0.0",
+  version: "3.0.0",
   hasPermssion: 0,
   credits: "ZAKARIYA",
   description: "Cute Baby Chat Bot",
@@ -20,7 +20,7 @@ module.exports.config = {
   usePrefix: false
 };
 
-// RANDOM REPLIES
+// Random Reply List
 const greetings = [
   "হুম জানু বলো 😘",
   "এতো ডাকো কেনো 🙈",
@@ -31,19 +31,15 @@ const greetings = [
   "হুম শুনতেছি 😼",
   "ডাকছো কেনো জানু 🤭",
   "বলো বাবু 💖",
-  "উম্মাহ 😘",
-  "এতো ডাকলে প্রেমে পড়ে যাবো 😹💖",
-  "আমি কিন্তু রাগ করে block দিতে পারি 😒",
-  "বলো জানু কি খবর 😚",
-  "তোমারে দেখলেই হাসি পায় 😹",
-  "আমারে এতো miss করো কেনো 😌"
+  "উম্মাহ 😘"
 ];
 
-// AUTO REPLIES
+// Auto Reply System
 const responses = {
+
   "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো😶👻😘",
 
-  "miss u too": "হুম আমি ও তোমাকে Miss করি 😏💖",
+  "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
 
   "kiss de": "কিস দিস না 😒 আগে দাঁত ব্রাশ করে আয় 🤬🪥",
 
@@ -182,7 +178,7 @@ const responses = {
   "tired": "Life এ tired 🙂 কিন্তু online এ active 😹📱"
 };
 
-// HANDLE EVENT
+// Handle Event
 module.exports.handleEvent = async function ({
   api,
   event,
@@ -198,25 +194,20 @@ module.exports.handleEvent = async function ({
     if (!global.client.handleReply)
       global.client.handleReply = [];
 
-    // AUTO REPLY
+    // Auto Reply
     if (responses[raw]) {
       return api.sendMessage(
         responses[raw],
         threadID,
-        (err, info) => {
-          if (!err) {
-            global.client.handleReply.push({
-              name: module.exports.config.name,
-              messageID: info.messageID,
-              author: senderID
-            });
-          }
-        },
         messageID
       );
     }
 
-    // RANDOM CALL
+    const senderName = await Users.getNameUser(senderID);
+
+    const simsim = await getMainAPI();
+
+    // Random Greetings
     if (
       raw === "baby" ||
       raw === "bot" ||
@@ -227,6 +218,7 @@ module.exports.handleEvent = async function ({
       raw === "জান" ||
       raw === "বট"
     ) {
+
       const msg =
         greetings[Math.floor(Math.random() * greetings.length)];
 
@@ -246,7 +238,7 @@ module.exports.handleEvent = async function ({
       );
     }
 
-    // AI CHAT
+    // AI Chat
     if (
       raw.startsWith("baby ") ||
       raw.startsWith("bot ") ||
@@ -257,10 +249,6 @@ module.exports.handleEvent = async function ({
       raw.startsWith("বট ") ||
       raw.startsWith("জান ")
     ) {
-      const senderName =
-        await Users.getNameUser(senderID);
-
-      const simsim = await getMainAPI();
 
       const query = raw.replace(
         /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i,
@@ -270,9 +258,7 @@ module.exports.handleEvent = async function ({
       if (!query) return;
 
       const res = await axios.get(
-        `${simsim}/simsimi?text=${encodeURIComponent(
-          query
-        )}&senderName=${encodeURIComponent(senderName)}`
+        `${simsim}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`
       );
 
       const reply = Array.isArray(res.data.response)
@@ -294,35 +280,37 @@ module.exports.handleEvent = async function ({
         messageID
       );
     }
+
   } catch (e) {
     console.log(e);
   }
 };
 
-// HANDLE REPLY
+// Handle Reply
 module.exports.handleReply = async function ({
   api,
   event,
   Users,
   handleReply
 }) {
+
   try {
+
     if (event.senderID !== handleReply.author)
       return;
-
-    const senderName =
-      await Users.getNameUser(event.senderID);
 
     const text = event.body;
 
     if (!text) return;
 
+    const senderName = await Users.getNameUser(
+      event.senderID
+    );
+
     const simsim = await getMainAPI();
 
     const res = await axios.get(
-      `${simsim}/simsimi?text=${encodeURIComponent(
-        text
-      )}&senderName=${encodeURIComponent(senderName)}`
+      `${simsim}/simsimi?text=${encodeURIComponent(text)}&senderName=${encodeURIComponent(senderName)}`
     );
 
     const reply = Array.isArray(res.data.response)
@@ -333,33 +321,43 @@ module.exports.handleReply = async function ({
       reply,
       event.threadID,
       (err, info) => {
+
         if (!err) {
+
           global.client.handleReply.push({
             name: module.exports.config.name,
             messageID: info.messageID,
             author: event.senderID
           });
+
         }
+
       },
       event.messageID
     );
+
   } catch (e) {
+
     return api.sendMessage(
       "🙂 পরে আবার বলো",
       event.threadID,
       event.messageID
     );
+
   }
+
 };
 
-// RUN
+// Run
 module.exports.run = async function ({
   api,
   event
 }) {
+
   return module.exports.handleEvent({
     api,
     event,
     Users: global.Users
   });
+
 };
