@@ -26,8 +26,7 @@ module.exports.config = {
 };
 
 // ================= GREETINGS =================
-const greetings = [
-  "হুম জানু বলো 😘",
+const greetings = 
   "এতো ডাকো কেনো 🙈",
   "বলো কি করতে পারি 😌",
   "আমি বিজি আছি 😏",
