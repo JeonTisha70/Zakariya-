@@ -20,7 +20,7 @@ module.exports.config = {
   usePrefix: false
 };
 
-// Random Reply List
+// RANDOM REPLIES
 const greetings = [
   "হুম জানু বলো 😘",
   "এতো ডাকো কেনো 🙈",
@@ -31,10 +31,19 @@ const greetings = [
   "হুম শুনতেছি 😼",
   "ডাকছো কেনো জানু 🤭",
   "বলো বাবু 💖",
-  "উম্মাহ 😘"
+  "উম্মাহ 😘",
+  "এতো ডাকলে প্রেমে পড়ে যাবো 😹💖",
+  "আমি কিন্তু রাগ করে block দিতে পারি 😒",
+  "বলো জানু কি খবর 😚",
+  "তোমারে দেখলেই হাসি পায় 😹",
+  "আমারে এতো miss করো কেনো 😌"
+];
+
+// AUTO REPLIES
+const responses = {
   "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো😶👻😘",
 
-  "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
+  "miss u too": "হুম আমি ও তোমাকে Miss করি 😏💖",
 
   "kiss de": "কিস দিস না 😒 আগে দাঁত ব্রাশ করে আয় 🤬🪥",
 
@@ -115,7 +124,7 @@ const greetings = [
   "hmm": "Hmmm কিসের হুমম জানু 🥵",
 
   "love": "Love করলে আগে recharge দাও 😹📲",
-  
+
   "single": "Single আছি কিন্তু মনের ভিতরে ১৪ টা crush 😩😂",
 
   "crush": "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
@@ -171,9 +180,9 @@ const greetings = [
   "babu": "হুম বাবু বলো 😚",
 
   "tired": "Life এ tired 🙂 কিন্তু online এ active 😹📱"
-];
+};
 
-// Handle Event
+// HANDLE EVENT
 module.exports.handleEvent = async function ({
   api,
   event,
@@ -189,11 +198,25 @@ module.exports.handleEvent = async function ({
     if (!global.client.handleReply)
       global.client.handleReply = [];
 
-    const senderName = await Users.getNameUser(senderID);
+    // AUTO REPLY
+    if (responses[raw]) {
+      return api.sendMessage(
+        responses[raw],
+        threadID,
+        (err, info) => {
+          if (!err) {
+            global.client.handleReply.push({
+              name: module.exports.config.name,
+              messageID: info.messageID,
+              author: senderID
+            });
+          }
+        },
+        messageID
+      );
+    }
 
-    const simsim = await getMainAPI();
-
-    // Single Call Replies
+    // RANDOM CALL
     if (
       raw === "baby" ||
       raw === "bot" ||
@@ -223,7 +246,7 @@ module.exports.handleEvent = async function ({
       );
     }
 
-    // Prefix Chat
+    // AI CHAT
     if (
       raw.startsWith("baby ") ||
       raw.startsWith("bot ") ||
@@ -234,6 +257,11 @@ module.exports.handleEvent = async function ({
       raw.startsWith("বট ") ||
       raw.startsWith("জান ")
     ) {
+      const senderName =
+        await Users.getNameUser(senderID);
+
+      const simsim = await getMainAPI();
+
       const query = raw.replace(
         /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i,
         ""
@@ -271,7 +299,7 @@ module.exports.handleEvent = async function ({
   }
 };
 
-// Handle Reply
+// HANDLE REPLY
 module.exports.handleReply = async function ({
   api,
   event,
@@ -279,11 +307,11 @@ module.exports.handleReply = async function ({
   handleReply
 }) {
   try {
-    if (event.senderID !== handleReply.author) return;
+    if (event.senderID !== handleReply.author)
+      return;
 
-    const senderName = await Users.getNameUser(
-      event.senderID
-    );
+    const senderName =
+      await Users.getNameUser(event.senderID);
 
     const text = event.body;
 
@@ -324,7 +352,7 @@ module.exports.handleReply = async function ({
   }
 };
 
-// Run Command
+// RUN
 module.exports.run = async function ({
   api,
   event
