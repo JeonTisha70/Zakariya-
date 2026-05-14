@@ -40,7 +40,7 @@ module.exports.handleEvent = async function ({
       "good morning": "Good Morning 😚",
       "good night": "Good Night 🌙💤",
       "love you": "আমিও তোমাকে ভালোবাসি 😘",
-      "i love you": "উম্মাহ 😘💋",
+      "i love you": "I love you 😘💋",
       "miss you": "আমিও তোমাকে মিস করি 🥺",
       "hmm": "হুম বলো জানু 😌",
       "bot": "বলো কি করতে পারি 😎",
