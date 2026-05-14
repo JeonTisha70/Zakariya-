@@ -114,7 +114,7 @@ module.exports.handleReply = async function ({ api, event, handleReply }) {
     );
 
   } catch {
-    return api.sendMessage("🙂 একটু পরে আবার বলো", event.threadID, event.messageID);
+    return api.sendMessage("🙂 একটু পরে আবার বলবো", event.threadID, event.messageID);
   }
 };
 
