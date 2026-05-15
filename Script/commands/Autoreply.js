@@ -9,6 +9,7 @@ const getMainAPI = async () => {
     const res = await axios.get(apiList);
     return res.data.simsimi;
   } catch (e) {
+    console.log("API ERROR:", e.message);
     return null;
   }
 };
@@ -26,13 +27,13 @@ module.exports.config = {
 };
 
 // ================= GREETINGS =================
-const greetings = 
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
+const greetings = [
+  "জি জানু 😘",
+  "ডাকছো কেনো বেবি 💖",
+  "হুম বলো জান 🥺",
+  "আমি আছি তোমার জন্য 😌",
+  "কি করো জানু 😚",
+  "Yes Baby 💕"
 ];
 
 // ================= AUTO RESPONSES =================
@@ -44,15 +45,15 @@ const responses = {
   "love you": "আমিও তোমাকে ভালোবাসি 😘",
   "miss you": "আমিও তোমাকে মিস করি 🥺",
   hmm: "হুম বলো জানু 😌",
-  bot: "",
-  baby: "",
+  bot: "জি আমি আছি 😚",
+  baby: "হুম জানু 💖",
   owner: "Owner : ZAKARIYA 😘",
   admin: "Admin হলো ZAKARIYA 😎",
   bye: "আবার আসবা কিন্তু 🥺",
   thanks: "Welcome 😘",
   "ki koro": "তোমার সাথে কথা বলতেছি 😌",
-  pagol: "",
-  "kiss me": "",
+  pagol: "তুমিই পাগল 😹",
+  "kiss me": "উফফ লজ্জা লাগে 🙈",
 
   single: "Single আছি কিন্তু মনের ভিতরে ১৪ crush 😩😂",
   crush: "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
@@ -62,7 +63,7 @@ const responses = {
   "mon kharap": "মন খারাপ? চা খাও 😌☕",
   ghum: "ঘুম আসে কিন্তু ফোন ছাড়তে পারি না 📱😩",
   busy: "Busy না 🙂 নাটক করতেছি 😹🎭",
-  love: "",
+  love: "ভালোবাসা সুন্দর 😘",
   "taka de": "আমি গরিব 😭 তুমি দাও 💸"
 };
 
@@ -70,24 +71,30 @@ const responses = {
 module.exports.handleEvent = async function ({ api, event, Users }) {
   try {
     const { threadID, messageID, body, senderID } = event;
+
     if (!body) return;
 
     const text = body.toLowerCase().trim();
 
-    global.client.handleReply = global.client.handleReply || [];
+    global.client.handleReply =
+      global.client.handleReply || [];
 
-    // 1️⃣ FAST AUTO REPLY
+    // ================= FAST AUTO REPLY =================
     if (responses[text]) {
-      return api.sendMessage(responses[text], threadID, messageID);
+      return api.sendMessage(
+        responses[text],
+        threadID,
+        messageID
+      );
     }
 
     const senderName = await Users.getNameUser(senderID);
+
     const base = await getMainAPI();
 
-    // API fail safe
     if (!base) return;
 
-    // 2️⃣ GREETING
+    // ================= GREETING =================
     if (
       text === "baby" ||
       text === "bot" ||
@@ -95,35 +102,63 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
       text === "xan" ||
       text === "বেবি"
     ) {
-      const msg = greetings[Math.floor(Math.random() * greetings.length)];
-      return api.sendMessage(msg, threadID, messageID);
+      const msg =
+        greetings[
+          Math.floor(Math.random() * greetings.length)
+        ];
+
+      return api.sendMessage(
+        msg,
+        threadID,
+        messageID
+      );
     }
 
-    // 3️⃣ SIMSIMI CHAT
+    // ================= SIMSIMI CHAT =================
     if (
       text.startsWith("baby ") ||
       text.startsWith("bot ") ||
       text.startsWith("jan ") ||
       text.startsWith("বেবি ")
     ) {
-      const query = text.replace(/^(baby|bot|jan|বেবি)\s+/i, "");
+      const query = text.replace(
+        /^(baby|bot|jan|বেবি)\s+/i,
+        ""
+      );
+
       if (!query) return;
 
       const url = `${base}/simsimi?text=${encodeURIComponent(
         query
       )}&senderName=${encodeURIComponent(senderName)}`;
 
-      const res = await axios.get(url).catch(() => null);
+      const res = await axios
+        .get(url)
+        .catch(() => null);
+
       if (!res || !res.data) return;
 
       const reply = Array.isArray(res.data.response)
         ? res.data.response[0]
         : res.data.response;
 
-      return api.sendMessage(reply || "🙂 বুঝতে পারিনি", threadID, messageID);
+      return api.sendMessage(
+        reply || "🙂 বুঝতে পারিনি",
+        threadID,
+        (err, info) => {
+          if (!err) {
+            global.client.handleReply.push({
+              name: module.exports.config.name,
+              messageID: info.messageID,
+              author: senderID
+            });
+          }
+        },
+        messageID
+      );
     }
   } catch (e) {
-    console.log("Error:", e);
+    console.log("HANDLE EVENT ERROR:", e);
   }
 };
 
@@ -136,21 +171,34 @@ module.exports.handleReply = async function ({
 }) {
   try {
     if (!event.body) return;
-    if (event.senderID !== handleReply.author) return;
+
+    if (event.senderID !== handleReply.author)
+      return;
 
     const text = event.body.trim();
-    const senderName = await Users.getNameUser(event.senderID);
+
+    const senderName = await Users.getNameUser(
+      event.senderID
+    );
 
     const base = await getMainAPI();
+
     if (!base) return;
 
     const url = `${base}/simsimi?text=${encodeURIComponent(
       text
     )}&senderName=${encodeURIComponent(senderName)}`;
 
-    const res = await axios.get(url).catch(() => null);
+    const res = await axios
+      .get(url)
+      .catch(() => null);
+
     if (!res || !res.data) {
-      return api.sendMessage("🙂 পরে আবার বলো", event.threadID, event.messageID);
+      return api.sendMessage(
+        "🙂 পরে আবার বলো",
+        event.threadID,
+        event.messageID
+      );
     }
 
     const reply = Array.isArray(res.data.response)
@@ -162,7 +210,6 @@ module.exports.handleReply = async function ({
       event.threadID,
       (err, info) => {
         if (!err) {
-          global.client.handleReply = global.client.handleReply || [];
           global.client.handleReply.push({
             name: module.exports.config.name,
             messageID: info.messageID,
@@ -173,11 +220,24 @@ module.exports.handleReply = async function ({
       event.messageID
     );
   } catch (e) {
-    return api.sendMessage("🙂 পরে আবার বলো", event.threadID, event.messageID);
+    console.log("HANDLE REPLY ERROR:", e);
+
+    return api.sendMessage(
+      "🙂 পরে আবার বলো",
+      event.threadID,
+      event.messageID
+    );
   }
 };
 
 // ================= RUN =================
-module.exports.run = async function ({ api, event }) {
-  return module.exports.handleEvent({ api, event, Users: global.Users });
+module.exports.run = async function ({
+  api,
+  event
+}) {
+  return module.exports.handleEvent({
+    api,
+    event,
+    Users: global.Users
+  });
 };
