@@ -207,13 +207,7 @@ module.exports.handleEvent = async function ({
         "জান",
         "বট"
       ].includes(raw)
-    ) {
-      const msg =
-        greetings[
-          Math.floor(
-            Math.random() * greetings.length
-          )
-        ];
+    ) 
 
       return api.sendMessage(
         msg,
