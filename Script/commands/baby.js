@@ -17,7 +17,7 @@ const getMainAPI = async () => {
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "4.0.1",
+  version: "4.0.2",
   hasPermssion: 0,
   credits: "ZAKARIYA",
   description: "Cute Baby Chat Bot",
@@ -26,6 +26,20 @@ module.exports.config = {
   cooldowns: 0,
   usePrefix: false
 };
+
+// ================= RANDOM GREETINGS =================
+const greetings = [
+  "হুম জানু বলো 😘",
+  "জি বেবি 😚",
+  "কি খবর তোমার 💖",
+  "ডাকছো কেনো জান 😌",
+  "আমি আছি বলো 💕",
+  "হুম বলো জানু 🥺",
+  "Yes Baby 😘",
+  "কি করো জানু 😚",
+  "তোমার জন্য online আছি 😹",
+  "বলোনা কি হয়েছে 💖"
+];
 
 // ================= AUTO REPLIES =================
 const responses = {
@@ -46,16 +60,23 @@ const responses = {
 
   "love you": "আমিও তোমাকে ভালোবাসি 😘💖",
   "লাভ ইউ": "আমিও তোমাকে ভালোবাসি 😘💖",
+
   "i love you":
     "Love করলে সরাসরি জাকারিয়া বস কে বল জানু 😻🔥",
 
   love: "Love করলে আগে recharge দাও 😹📲",
-  valobashi: "ভালোবাসা দিয়া কি হবে 🙂 recharge দাও 😹📲",
 
-  "kiss me": "তুমি পঁচা 😒 তোমাকে কিস দিবো না 🤭",
-  "kiss de": "কিস দিস না 😒 আগে দাঁত ব্রাশ করে আয় 🤬🪥",
+  valobashi:
+    "ভালোবাসা দিয়া কি হবে 🙂 recharge দাও 😹📲",
 
-  ummmah: "এতো Ummmah কেনো জানু… কিছু বলবা? 😉",
+  "kiss me":
+    "তুমি পঁচা 😒 তোমাকে কিস দিবো না 🤭",
+
+  "kiss de":
+    "কিস দিস না 😒 আগে দাঁত ব্রাশ করে আয় 🤬🪥",
+
+  ummmah:
+    "এতো Ummmah কেনো জানু… কিছু বলবা? 😉",
 
   thanks:
     "এতো ধন্যবাদ না দিয়ে একটা বিরিয়ানি খাওয়াও 😋🍗",
@@ -72,7 +93,9 @@ const responses = {
   babu: "হুম বাবু বলো 😚",
 
   pagol: "হুম 🙂 তোমার জন্যই পাগল 😹",
-  pagli: "পাগলি না 🙂 limited edition 😌✨",
+
+  pagli:
+    "পাগলি না 🙂 limited edition 😌✨",
 
   single:
     "Single আছি কিন্তু মনের ভিতরে ১৪ টা crush 😩😂",
@@ -80,25 +103,40 @@ const responses = {
   crush:
     "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
 
-  gf: "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
+  gf:
+    "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
+
   bf: "BF না 🙂 PUBG খেলো 😹🎮",
 
-  busy: "Busy না 🙂 নাটক করতেছি 😹🎭",
+  busy:
+    "Busy না 🙂 নাটক করতেছি 😹🎭",
 
   "online aso":
     "হুম 🙂 data শেষ হওয়ার আগ পর্যন্ত 😹📶",
 
-  "কি করো": "তোমার সাথে কথা বলতেছি 😌💖",
-  "ki koro": "তোমারে reply দিতেছি জানু 📱😘",
-  "ki kro": "তোমারে reply দিতেছি 😌📱",
+  "কি করো":
+    "তোমার সাথে কথা বলতেছি 😌💖",
 
-  খাইছো: "হুম খাইছি 😋 তুমি খাইছো?",
-  khaiso: "না জানু 🙂 তোমার অপেক্ষায় আছি 🍽️😹",
+  "ki koro":
+    "তোমারে reply দিতেছি জানু 📱😘",
 
-  খাবি: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
-  khabi: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
+  "ki kro":
+    "তোমারে reply দিতেছি 😌📱",
 
-  "নাম কি": "আমার নাম সিনথিয়া 💖",
+  খাইছো:
+    "হুম খাইছি 😋 তুমি খাইছো?",
+
+  khaiso:
+    "না জানু 🙂 তোমার অপেক্ষায় আছি 🍽️😹",
+
+  খাবি:
+    "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
+
+  khabi:
+    "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
+
+  "নাম কি":
+    "আমার নাম সিনথিয়া 💖",
 
   "nam ki":
     "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
@@ -112,13 +150,17 @@ const responses = {
   "basa kothay":
     "তোমার হৃদয়ে থাকি 💘",
 
-  "তুমি কে": "আমি তোমার favourite bot 😌💖",
-  "tumi ke": "আমি cute baby bot 😚",
+  "তুমি কে":
+    "আমি তোমার favourite bot 😌💖",
+
+  "tumi ke":
+    "আমি cute baby bot 😚",
 
   "ভালো আছো":
     "আলহামদুলিল্লাহ ভালো আছি 🥰",
 
-  "valo aso": "হুম ভালো আছি জানু 😘",
+  "valo aso":
+    "হুম ভালো আছি জানু 😘",
 
   ghum:
     "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
@@ -129,7 +171,8 @@ const responses = {
   "taka de":
     "আমিই গরিব 😭 উল্টা তুমি টাকা দাও 💸",
 
-  "amar keu nai": "আমি আছি তো 😌✨",
+  "amar keu nai":
+    "আমি আছি তো 😌✨",
 
   "tmi cute":
     "জানি 😌 আয়নায় রোজ দেখি 😹🪞",
@@ -149,7 +192,8 @@ const responses = {
   breakup:
     "চিন্তা করিস না 😎 নতুন জন পাইয়া যাবি 🔥",
 
-  hmm: "Hmmm কিসের হুমম জানু 🥵",
+  hmm:
+    "Hmmm কিসের হুমম জানু 🥵",
 
   "rag korso":
     "রাগ করি নাই 🙂 শুধু block দেওয়ার চিন্তা করতেছি 😹",
@@ -171,8 +215,12 @@ module.exports.handleEvent = async function ({
   Users
 }) {
   try {
-    const { threadID, messageID, senderID, body } =
-      event;
+    const {
+      threadID,
+      messageID,
+      senderID,
+      body
+    } = event;
 
     if (!body) return;
 
@@ -207,7 +255,13 @@ module.exports.handleEvent = async function ({
         "জান",
         "বট"
       ].includes(raw)
-    ) 
+    ) {
+      const msg =
+        greetings[
+          Math.floor(
+            Math.random() * greetings.length
+          )
+        ];
 
       return api.sendMessage(
         msg,
