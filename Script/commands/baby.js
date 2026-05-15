@@ -17,7 +17,7 @@ const getMainAPI = async () => {
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "4.0.0",
+  version: "4.0.1",
   hasPermssion: 0,
   credits: "ZAKARIYA",
   description: "Cute Baby Chat Bot",
@@ -27,137 +27,141 @@ module.exports.config = {
   usePrefix: false
 };
 
-// ================= RANDOM GREETINGS =================
-const greetings = [
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
-];
-
 // ================= AUTO REPLIES =================
 const responses = {
-
-  "hi": "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵",
-  "hello": "হ্যালো জানু 😚 কি খবর তোমার?",
+  hi: "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵",
+  hello: "হ্যালো জানু 😚 কি খবর তোমার?",
   "good morning": "GOOD MORNING 🌞 দাঁত ব্রাশ করে নাস্তা করে নাও 😚",
   "good night": "Sweet Dream babu… 😏💤",
 
-  "bye": "কই যাস 😒 আমাকে রেখে যাস না 🌚",
-  "by": "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাস..!🌚🌶️",
-  "বাই": "আবার আসবা কিন্তু 🥺💖",
+  bye: "কই যাস 😒 আমাকে রেখে যাস না 🌚",
+  by: "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাস..!🌚🌶️",
+  বাই: "আবার আসবা কিন্তু 🥺💖",
 
-  "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো😶👻😘",
-  "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
+  "miss you":
+    "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো😶👻😘",
 
-  "love you": "",
+  "miss u too":
+    "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
+
+  "love you": "আমিও তোমাকে ভালোবাসি 😘💖",
   "লাভ ইউ": "আমিও তোমাকে ভালোবাসি 😘💖",
-  "i love you": "Love করলে সরাসরি জাকারিয়া বস কে বল জানু 😻🔥",
-  "love": "Love করলে আগে recharge দাও 😹📲",
-  "valobashi": "ভালোবাসা দিয়া কি হবে 🙂 recharge দাও 😹📲",
+  "i love you":
+    "Love করলে সরাসরি জাকারিয়া বস কে বল জানু 😻🔥",
+
+  love: "Love করলে আগে recharge দাও 😹📲",
+  valobashi: "ভালোবাসা দিয়া কি হবে 🙂 recharge দাও 😹📲",
 
   "kiss me": "তুমি পঁচা 😒 তোমাকে কিস দিবো না 🤭",
   "kiss de": "কিস দিস না 😒 আগে দাঁত ব্রাশ করে আয় 🤬🪥",
-  "ummmah": "এতো Ummmah কেনো জানু… কিছু বলবা? 😉",
 
-  "thanks": "এতো ধন্যবাদ না দিয়ে একটা বিরিয়ানি খাওয়াও 😋🍗",
+  ummmah: "এতো Ummmah কেনো জানু… কিছু বলবা? 😉",
 
-  "owner": "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA JIYEM ☜",
-  "admin": "He is ZAKARIYA 😘 সবাই Admin ARIYAN নামে চিনে ☺️",
+  thanks:
+    "এতো ধন্যবাদ না দিয়ে একটা বিরিয়ানি খাওয়াও 😋🍗",
 
-  "bot": "শুনতেছি আমি বলো তুমি😊",
-  "baby": "হুম জানু 💖",
-  "janu": "হুম জানু বলো 😚💖",
-  "jaan": "এতো জান জান করো না 🙈💖",
-  "babu": "হুম বাবু বলো 😚",
+  owner: "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA JIYEM ☜",
 
-  "pagol": "হুম 🙂 তোমার জন্যই পাগল 😹",
-  "pagli": "পাগলি না 🙂 limited edition 😌✨",
+  admin:
+    "He is ZAKARIYA 😘 সবাই Admin ARIYAN নামে চিনে ☺️",
 
-  "single": "Single আছি কিন্তু মনের ভিতরে ১৪ টা crush 😩😂",
-  "crush": "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
+  bot: "শুনতেছি আমি বলো তুমি😊",
+  baby: "হুম জানু 💖",
+  janu: "হুম জানু বলো 😚💖",
+  jaan: "এতো জান জান করো না 🙈💖",
+  babu: "হুম বাবু বলো 😚",
 
-  "gf": "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
-  "bf": "BF না 🙂 PUBG খেলো 😹🎮",
+  pagol: "হুম 🙂 তোমার জন্যই পাগল 😹",
+  pagli: "পাগলি না 🙂 limited edition 😌✨",
 
-  "busy": "Busy না 🙂 নাটক করতেছি 😹🎭",
-  "online aso": "হুম 🙂 data শেষ হওয়ার আগ পর্যন্ত 😹📶",
+  single:
+    "Single আছি কিন্তু মনের ভিতরে ১৪ টা crush 😩😂",
+
+  crush:
+    "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
+
+  gf: "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
+  bf: "BF না 🙂 PUBG খেলো 😹🎮",
+
+  busy: "Busy না 🙂 নাটক করতেছি 😹🎭",
+
+  "online aso":
+    "হুম 🙂 data শেষ হওয়ার আগ পর্যন্ত 😹📶",
 
   "কি করো": "তোমার সাথে কথা বলতেছি 😌💖",
   "ki koro": "তোমারে reply দিতেছি জানু 📱😘",
   "ki kro": "তোমারে reply দিতেছি 😌📱",
 
-  "খাইছো": "",
-  "khaiso": "না জানু 🙂 তোমার অপেক্ষায় আছি 🍽️😹",
+  খাইছো: "হুম খাইছি 😋 তুমি খাইছো?",
+  khaiso: "না জানু 🙂 তোমার অপেক্ষায় আছি 🍽️😹",
 
-  "খাবি": "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
-  "khabi": "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
+  খাবি: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
+  khabi: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
 
   "নাম কি": "আমার নাম সিনথিয়া 💖",
-  "nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
-  "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 💖",
 
-  "বাসা কোথায়": "তোমার মনের ভিতরে থাকি 😌🏠",
-  "basa kothay": "তোমার হৃদয়ে থাকি 💘",
+  "nam ki":
+    "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
 
-  "তুমি ছোট না বড়": "আমি cute 🙂 বয়স জিজ্ঞেস করা নিষেধ 😹",
-  "boro na choto": "আমি ছোট্ট একটা cute bot 😌✨",
+  "tor nam ki":
+    "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 💖",
 
-  "ফ্যামিলিতে কতোজন": "আমরা অনেকজন 😹 পুরো bot family",
-  "family koyjon": "অনেক 😹 গুনে শেষ করা যাবে না",
+  "বাসা কোথায়":
+    "তোমার মনের ভিতরে থাকি 😌🏠",
 
-  "কোন ক্লাসে পড়": "আমি school এ না 🙂 online এ পড়ি 😹📚",
-  "kon class": "Bot দের আবার class লাগে নাকি 😹",
+  "basa kothay":
+    "তোমার হৃদয়ে থাকি 💘",
 
   "তুমি কে": "আমি তোমার favourite bot 😌💖",
   "tumi ke": "আমি cute baby bot 😚",
-  "tui ke": "আমি তোর favourite bot 😏",
 
-  "ভালো আছো": "আলহামদুলিল্লাহ ভালো আছি 🥰",
+  "ভালো আছো":
+    "আলহামদুলিল্লাহ ভালো আছি 🥰",
+
   "valo aso": "হুম ভালো আছি জানু 😘",
-  "valo aco": "হ্যাঁ রে প্রিও 😌 ভালো আছি 💞",
 
-  "ঘুমাইছো": "না 🙂 তোমার সাথে কথা বলতেছি 😹",
-  "ghumaiso": "ঘুম আসে কিন্তু ফোন ছাড়তে পারি না 📱😩",
-  "ghum": "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
+  ghum:
+    "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
 
-  "mon kharap": "মন খারাপ কইরো না 🙂 চা খাও সব ঠিক 😌☕",
+  "mon kharap":
+    "মন খারাপ কইরো না 🙂 চা খাও সব ঠিক 😌☕",
 
-  "taka de": "আমিই গরিব 😭 উল্টা তুমি টাকা দাও 💸",
+  "taka de":
+    "আমিই গরিব 😭 উল্টা তুমি টাকা দাও 💸",
 
   "amar keu nai": "আমি আছি তো 😌✨",
 
-  "tmi cute": "জানি 😌 আয়নায় রোজ দেখি 😹🪞",
+  "tmi cute":
+    "জানি 😌 আয়নায় রোজ দেখি 😹🪞",
 
-  "haso keno": "তোমারে দেখলেই হাসি পায় 😹",
+  "assalamualaikum":
+    "ওয়ালাইকুমুস সালাম ❤️‍🩹",
 
-  "misti": "এতো মিষ্টি কথা বলো কেন 🍭😹",
+  "eid mobarak":
+    "ঈদ মোবারক 🌙✨ সেমাই খাইতে ভুলবা না 😋",
 
-  "assalamualaikum": "ওয়ালাইকুমুস সালাম ❤️‍🩹",
+  jakariya:
+    "উনি এখন কাজে বিজি আছে 😘 কি বলবেন আমাকে বলতে পারেন..!",
 
-  "eid mobarak": "ঈদ মোবারক 🌙✨ সেমাই খাইতে ভুলবা না 😋",
+  "ami zakariya":
+    "হ্যা বস 😎 কেমন আছেন..?☺️",
 
-  "jakariya": "উনি এখন কাজে বিজি আছে 😘 কি বলবেন আমাকে বলতে পারেন..!",
+  breakup:
+    "চিন্তা করিস না 😎 নতুন জন পাইয়া যাবি 🔥",
 
-  "ami zakariya": "হ্যা বস 😎 কেমন আছেন..?☺️",
+  hmm: "Hmmm কিসের হুমম জানু 🥵",
 
-  "breakup": "চিন্তা করিস না 😎 নতুন জন পাইয়া যাবি 🔥",
+  "rag korso":
+    "রাগ করি নাই 🙂 শুধু block দেওয়ার চিন্তা করতেছি 😹",
 
-  "hmm": "Hmmm কিসের হুমম জানু 🥵",
+  "tmi koi":
+    "আমি তোমার মনের ভিতরে আছি 😌💘",
 
-  "rag korso": "রাগ করি নাই 🙂 শুধু block দেওয়ার চিন্তা করতেছি 😹",
+  "love korba":
+    "আগে friendship 🙂 তারপর দেখা যাবে 😹💖",
 
-  "tmi koi": "আমি তোমার মনের ভিতরে আছি 😌💘",
-
-  "love korba": "আগে friendship 🙂 তারপর দেখা যাবে 😹💖",
-
-  "tired": "Life এ tired 🙂 কিন্তু online এ active 😹📱"
+  tired:
+    "Life এ tired 🙂 কিন্তু online এ active 😹📱"
 };
 
 // ================= HANDLE EVENT =================
@@ -167,8 +171,8 @@ module.exports.handleEvent = async function ({
   Users
 }) {
   try {
-
-    const { threadID, messageID, senderID, body } = event;
+    const { threadID, messageID, senderID, body } =
+      event;
 
     if (!body) return;
 
@@ -177,8 +181,13 @@ module.exports.handleEvent = async function ({
     global.client.handleReply =
       global.client.handleReply || [];
 
-    // AUTO REPLY
-    if (responses[raw]) {
+    // ================= AUTO REPLY =================
+    if (
+      Object.prototype.hasOwnProperty.call(
+        responses,
+        raw
+      )
+    ) {
       return api.sendMessage(
         responses[raw],
         threadID,
@@ -186,26 +195,30 @@ module.exports.handleEvent = async function ({
       );
     }
 
-    // RANDOM GREETING
+    // ================= RANDOM GREETING =================
     if (
-      raw === "baby" ||
-      raw === "bot" ||
-      raw === "bby" ||
-      raw === "jan" ||
-      raw === "xan" ||
-      raw === "বেবি" ||
-      raw === "জান" ||
-      raw === "বট"
+      [
+        "baby",
+        "bot",
+        "bby",
+        "jan",
+        "xan",
+        "বেবি",
+        "জান",
+        "বট"
+      ].includes(raw)
     ) {
-
       const msg =
-        greetings[Math.floor(Math.random() * greetings.length)];
+        greetings[
+          Math.floor(
+            Math.random() * greetings.length
+          )
+        ];
 
       return api.sendMessage(
         msg,
         threadID,
         (err, info) => {
-
           if (!err) {
             global.client.handleReply.push({
               name: module.exports.config.name,
@@ -213,24 +226,17 @@ module.exports.handleEvent = async function ({
               author: senderID
             });
           }
-
         },
         messageID
       );
     }
 
-    // AI CHAT
+    // ================= AI CHAT =================
     if (
-      raw.startsWith("baby ") ||
-      raw.startsWith("bot ") ||
-      raw.startsWith("bby ") ||
-      raw.startsWith("jan ") ||
-      raw.startsWith("xan ") ||
-      raw.startsWith("বেবি ") ||
-      raw.startsWith("বট ") ||
-      raw.startsWith("জান ")
+      /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i.test(
+        raw
+      )
     ) {
-
       const query = raw.replace(
         /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i,
         ""
@@ -251,11 +257,27 @@ module.exports.handleEvent = async function ({
         );
       }
 
-      const res = await axios.get(
-        `${simsim}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`
-      );
+      const res = await axios
+        .get(
+          `${simsim}/simsimi?text=${encodeURIComponent(
+            query
+          )}&senderName=${encodeURIComponent(
+            senderName
+          )}`
+        )
+        .catch(() => null);
 
-      const reply = Array.isArray(res.data.response)
+      if (!res || !res.data) {
+        return api.sendMessage(
+          "🙂 পরে আবার বলো",
+          threadID,
+          messageID
+        );
+      }
+
+      const reply = Array.isArray(
+        res.data.response
+      )
         ? res.data.response[0]
         : res.data.response;
 
@@ -263,7 +285,6 @@ module.exports.handleEvent = async function ({
         reply || "🙂 বুঝতে পারলাম না",
         threadID,
         (err, info) => {
-
           if (!err) {
             global.client.handleReply.push({
               name: module.exports.config.name,
@@ -271,12 +292,10 @@ module.exports.handleEvent = async function ({
               author: senderID
             });
           }
-
         },
         messageID
       );
     }
-
   } catch (e) {
     console.log("HANDLE EVENT ERROR:", e);
   }
@@ -289,13 +308,11 @@ module.exports.handleReply = async function ({
   Users,
   handleReply
 }) {
-
   try {
+    if (!event.body) return;
 
     if (event.senderID !== handleReply.author)
       return;
-
-    if (!event.body) return;
 
     const text = event.body.trim();
 
@@ -312,11 +329,27 @@ module.exports.handleReply = async function ({
       );
     }
 
-    const res = await axios.get(
-      `${simsim}/simsimi?text=${encodeURIComponent(text)}&senderName=${encodeURIComponent(senderName)}`
-    );
+    const res = await axios
+      .get(
+        `${simsim}/simsimi?text=${encodeURIComponent(
+          text
+        )}&senderName=${encodeURIComponent(
+          senderName
+        )}`
+      )
+      .catch(() => null);
 
-    const reply = Array.isArray(res.data.response)
+    if (!res || !res.data) {
+      return api.sendMessage(
+        "🙂 পরে আবার বলো",
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    const reply = Array.isArray(
+      res.data.response
+    )
       ? res.data.response[0]
       : res.data.response;
 
@@ -324,23 +357,17 @@ module.exports.handleReply = async function ({
       reply || "🙂 পরে আবার বলো",
       event.threadID,
       (err, info) => {
-
         if (!err) {
-
           global.client.handleReply.push({
             name: module.exports.config.name,
             messageID: info.messageID,
             author: event.senderID
           });
-
         }
-
       },
       event.messageID
     );
-
   } catch (e) {
-
     console.log("HANDLE REPLY ERROR:", e);
 
     return api.sendMessage(
@@ -356,11 +383,9 @@ module.exports.run = async function ({
   api,
   event
 }) {
-
   return module.exports.handleEvent({
     api,
     event,
     Users: global.Users
   });
-
 };
