@@ -71,7 +71,7 @@ const responses = {
   "owner": "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA JIYEM ☜",
   "admin": "He is ZAKARIYA 😘 সবাই Admin ARIYAN নামে চিনে ☺️",
 
-  "bot": "বলো কি করতে পারি 😎",
+  "bot": "",
   "baby": "হুম জানু 💖",
   "janu": "হুম জানু বলো 😚💖",
   "jaan": "এতো জান জান করো না 🙈💖",
