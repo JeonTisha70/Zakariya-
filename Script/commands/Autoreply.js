@@ -44,15 +44,15 @@ const responses = {
   "love you": "আমিও তোমাকে ভালোবাসি 😘",
   "miss you": "আমিও তোমাকে মিস করি 🥺",
   hmm: "হুম বলো জানু 😌",
-  bot: "বলো কি করতে পারি 😎",
-  baby: "হুম জানু 💖",
+  bot: "",
+  baby: "",
   owner: "Owner : ZAKARIYA 😘",
   admin: "Admin হলো ZAKARIYA 😎",
   bye: "আবার আসবা কিন্তু 🥺",
   thanks: "Welcome 😘",
   "ki koro": "তোমার সাথে কথা বলতেছি 😌",
-  pagol: "হুম তোমার জন্য পাগল 🤭",
-  "kiss me": "উম্মাহ 😘",
+  pagol: "",
+  "kiss me": "",
 
   single: "Single আছি কিন্তু মনের ভিতরে ১৪ crush 😩😂",
   crush: "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
@@ -62,7 +62,7 @@ const responses = {
   "mon kharap": "মন খারাপ? চা খাও 😌☕",
   ghum: "ঘুম আসে কিন্তু ফোন ছাড়তে পারি না 📱😩",
   busy: "Busy না 🙂 নাটক করতেছি 😹🎭",
-  love: "Love করলে আগে recharge দাও 😹📲",
+  love: "",
   "taka de": "আমি গরিব 😭 তুমি দাও 💸"
 };
 
