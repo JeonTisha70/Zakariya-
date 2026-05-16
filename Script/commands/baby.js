@@ -1,4 +1,3 @@
-
 const axios = require("axios");
 
 // ================= API =================
@@ -18,15 +17,17 @@ const getMainAPI = async () => {
 // ================= GLOBAL =================
 global.client = global.client || {};
 global.client.handleReply = global.client.handleReply || [];
-global.handleReply = global.handleReply || []; // ✅ FIX IMPORTANT
+
+// 🔥 DOUBLE REPLY STOP MEMORY
+global.__baby_last_msg = global.__baby_last_msg || "";
 
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "6.0.3",
+  version: "6.0.4",
   hasPermission: 0,
   credits: "ZAKARIYA",
-  description: "Baby AI Chat Bot Ultra (Stable + Funny)",
+  description: "Baby AI Chat Bot Ultra (Stable + No Duplicate Reply)",
   commandCategory: "chat",
   usages: "[text]",
   cooldowns: 0,
@@ -44,81 +45,89 @@ const greetings = [
 
 // ================= AUTO RESPONSES =================
 const responses = {
-  hi: "হাই জান 😘💖",
-  hello: "হ্যালো বেবি 😚",
-  bye: "আবার আসবা জান 🥺💖",
-  love: "আমি তোমাকে ভালোবাসি 😘💖",
-  thanks: "ওয়েলকাম 😋",
-  owner: "Owner 👉 ZAKARIYA",
-  admin: "Admin 👉 ARIYAN 😎",
-  hmm: "হুম 😵",
-  busy: "হুমম একটু Busy 🙂",
-  single: "আমিও, কিন্তু crush অনেক 😩😂",
+  Hi: "হাই জান 😘💖",
+  Hello: "হ্যালো বেবি 😚",
+  Bye: "আবার আসবা জান 🥺💖",
+  Love: "আমি তোমাকে ভালোবাসি 😘💖",
+  Thanks: "ওয়েলকাম 😋",
+  Owner: "Owner 👉 ZAKARIYA",
+  Admin: "Admin 👉 ARIYAN 😎",
+  Hmm: "হুম 😵",
+  Busy: "হুমম একটু Busy 🙂",
+  Single: "আমিও, কিন্তু crush অনেক 😩😂",
 
-  attitude: "আমি সবার জন্য না 😎🔥",
-  boss: "Boss আমার জাকারিয়া 😏",
-  king: "বস জাকারিয়া 👑",
-  queen: "জাকারিয়ার বউ মানে আমার ভাবি 😌💖",
-  smart: "আমি already smart 😎",
-  ugly: "mirror দেখে আসো 😹",
-  hero: "আমি নায়ক 😎🔥",
-  legend: "তুমি আফার ভক্ত আমি জানি 😏",
-  swag: "swag level max 😎🔥",
-  angry: "রাগ করলে ভয় পাই না 😈",
-  cool: "ঠান্ডা হওয়ার সময় নেই আয় মারামারি করি 😎",
+  Attitude: "আমি সবার জন্য না 😎🔥",
+  Boss: "Boss আমার জাকারিয়া 😏",
+  King: "বস জাকারিয়া 👑",
+  Queen: "জাকারিয়ার বউ মানে আমার ভাবি 😌💖",
+  Smart: "আমি already smart 😎",
+  Ugly: "mirror দেখে আসো 😹",
+  Hero: "আমি নায়ক 😎🔥",
+  Legend: "তুমি আফার ভক্ত আমি জানি 😏",
+  Swag: "swag level max 😎🔥",
+  Angry: "রাগ করলে ভয় পাই না 😈",
+  Cool: "ঠান্ডা হওয়ার সময় নেই আয় মারামারি করি 😎",
 
-  "mon kharap": "চা খাও ☕ সব ঠিক হয়ে যাবে 😢",
-  "amar keu nei": "আমি আছি তো 😔💖",
-  breakup: "পেরা নাই চিল আর একটা খুজে নিবো 😊",
-  "betha kore": "অপেক্ষা করো ব্যথা কমে যাবে 💔",
-  "kanna pacce": "কান্না করো না 😢",
-  "miss u": "আমি আছি 😢💖",
+  "Mon kharap": "চা খাও ☕ সব ঠিক হয়ে যাবে 😢",
+  "Amar keu nei": "আমি আছি তো 😔💖",
+  Breakup: "পেরা নাই চিল আর একটা খুজে নিবো 😊",
+  "Betha kore": "অপেক্ষা করো ব্যথা কমে যাবে 💔",
+  "Kanna pacce": "কান্না করো না 😢",
+  "Miss u": "আমি আছি 😢💖",
 
-  boka: "তুমি নিজেই একটা boka 😹",
-  lol: "হাহাহা 🤣",
-  haha: "হাসতে থাকো 😆",
-  idiot: "mirror দেখো আগে 😹",
-  bal: "বাল বাল করো কেন 🤡",
-  "buddhi nai": "brain update দাও 😹",
-  "porte boso": "study না করলে fail 😹📚",
-  exam: "exam মানে ভয় 😩",
-  homework: "copy paste করো 😏",
-  kiss: "আগে দাঁত ব্রাশ কর 😹🪥",
-  ghumabo: "ঘুমাও 😴 আমি পাহারা দিচ্ছি 😌",
-  sad2: "চিন্তা করো না 😢",
-  happy: "হ্যাপি থাকো 😚💖",
-  taka: "আমার কাছে নাই 😭💸",
-  khabo: "বিরিয়ানি খাও 😋🍗",
-  drink: "পানি খাও 😹",
-  friend: "আমি তোমার best friend 😘",
+  Boka: "তুমি নিজেই একটা boka 😹",
+  Lol: "হাহাহা 🤣",
+  Haha: "হাসতে থাকো 😆",
+  Idiot: "mirror দেখো আগে 😹",
+  Bal: "বাল বাল করো কেন 🤡",
+  "Buddhi nai": "brain update দাও 😹",
+  "Porte boso": "study না করলে fail 😹📚",
+  Exam: "exam মানে ভয় 😩",
+  Homework: "copy paste করো 😏",
+  Kiss: "আগে দাঁত ব্রাশ কর 😹🪥",
+  Ghumabo: "ঘুমাও 😴 আমি পাহারা দিচ্ছি 😌",
+  Sad2: "চিন্তা করো না 😢",
+  Happy: "হ্যাপি থাকো 😚💖",
+  Taka: "আমার কাছে নাই 😭💸",
+  Khabo: "বিরিয়ানি খাও 😋🍗",
+  Drink: "পানি খাও 😹",
+  Friend: "আমি তোমার best friend 😘",
 
-  ok: "ঠিক আছে 😌",
-  no: "কেন না? 😹",
-  yes: "ঠিক আছে 😎",
-  wow: "ওহহ 😍",
-  omg: "OMG 😳",
-  sorry: "ঠিক আছে জান 😌💖",
-  "love u": "Love you too 😘💖"
+  Ok: "ঠিক আছে 😌",
+  No: "কেন না? 😹",
+  Yes: "ঠিক আছে 😎",
+  Wow: "ওহহ 😍",
+  Omg: "OMG 😳",
+  Sorry: "ঠিক আছে জান 😌💖",
+  "Love u": "Love you too 😘💖"
 };
 
 // ================= HANDLE EVENT =================
 module.exports.handleEvent = async ({ api, event, Users }) => {
   try {
-    const { threadID, messageID, body, senderID } = event;
+    const { threadID, messageID, body } = event;
     if (!body || typeof body !== "string") return;
 
     const text = body.toLowerCase().trim();
 
+    // 🔥 DOUBLE REPLY BLOCK
+    const uniqueKey = threadID + "_" + messageID;
+    if (global.__baby_last_msg === uniqueKey) return;
+    global.__baby_last_msg = uniqueKey;
+
+    // AUTO RESPONSE
     if (responses[text]) {
       return api.sendMessage(responses[text], threadID, messageID);
     }
 
+    // GREETING
     const greetWords = ["baby", "bot", "jan", "বেবি", "বট", "জান"];
     if (greetWords.some(w => text.includes(w))) {
       const msg = greetings[Math.floor(Math.random() * greetings.length)];
       return api.sendMessage(msg, threadID, messageID);
     }
 
+    // PREFIX
     const prefixRegex = /^(baby|bot|jan|বেবি|বট|জান)\b/i;
     if (!prefixRegex.test(text)) return;
 
@@ -130,7 +139,8 @@ module.exports.handleEvent = async ({ api, event, Users }) => {
       return api.sendMessage("❌ API অফলাইন", threadID, messageID);
     }
 
-    const res = await axios.get(`${base}/simsimi?text=${encodeURIComponent(query)}`)
+    const res = await axios
+      .get(`${base}/simsimi?text=${encodeURIComponent(query)}`)
       .catch(() => null);
 
     if (!res?.data?.response) {
