@@ -1,250 +1,195 @@
 
 const axios = require("axios");
 
-// ================= API LINK =================
+// ================= API =================
 const apiList =
   "https://raw.githubusercontent.com/shahadat-sahu/SAHU-API/refs/heads/main/SAHU-API.json";
 
-// ================= GET MAIN API =================
 const getMainAPI = async () => {
   try {
     const res = await axios.get(apiList);
-
-    if (!res?.data?.simsimi) {
-      console.log("SIMSIMI API NOT FOUND");
-      return null;
-    }
-
-    return res.data.simsimi;
+    return res?.data?.simsimi || null;
   } catch (e) {
     console.log("API ERROR:", e.message);
     return null;
   }
 };
 
-// ================= SAFE GLOBAL =================
+// ================= GLOBAL =================
 global.client = global.client || {};
 global.client.handleReply = global.client.handleReply || [];
 
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "4.0.9",
+  version: "6.0.1",
   hasPermission: 0,
   credits: "ZAKARIYA",
-  description: "Cute Baby Chat Bot",
+  description: "Baby AI Chat Bot Ultra (Fixed Stable)",
   commandCategory: "chat",
   usages: "[text]",
   cooldowns: 0,
   usePrefix: false
 };
 
+// ================= GREETINGS =================
+const greetings = ["হুম জানু বলো 😘"];
+
 // ================= AUTO RESPONSES =================
 const responses = {
-  hi: "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵",
-  hello: "হ্যালো জানু 😚 কি খবর তোমার?",
-  "good morning": "GOOD MORNING 🌞 দাঁত ব্রাশ করে নাস্তা করে নাও 😚",
-  "good night": "Sweet Dream babu… 😏💤",
-  bye: "কই যাস 😒 আমাকে রেখে যাস না 🌚",
-  by: "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাস..!🌚🌶️",
-  বাই: "আবার আসবা কিন্তু 🥺💖",
-  "miss you": "আমিও তোমাকে মিস করি 🥺",
-  "love you": "আমিও তোমাকে ভালোবাসি 😘💖",
-  thanks: "এতো ধন্যবাদ না দিয়ে একটা বিরিয়ানি খাওয়াও 😋🍗",
-  owner: "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA ☜",
-  admin: "Admin হলো ZAKARIYA 😘",
-  jaan: "এতো জান জান করো না 🙈💖",
-  babu: "হুম বাবু বলো 😚",
-  pagol: "হুম 🙂 তোমার জন্যই পাগল 😹",
-  single: "Single আছি কিন্তু মনের ভিতরে ১৪ টা crush 😩😂",
-  crush: "Crush খাইয়া লাভ নাই 😹",
-  gf: "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
-  bf: "BF না 🙂 PUBG খেলো 😹🎮",
-  busy: "Busy না 🙂 নাটক করতেছি 😹🎭",
-  "ki koro": "তোমারে reply দিতেছি জানু 📱😘",
-  ghum: "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
-  "mon kharap": "মন খারাপ কইরো না 🙂 চা খাও ☕",
-  "taka de": "আমিই গরিব 😭 উল্টা তুমি টাকা দাও 💸",
-  hmm: "Hmmm কিসের হুমম জানু 🥵"
+  hi: "হাই জান 😘💖",
+  hello: "হ্যালো বেবি 😚",
+  bye: "আবার আসবা জান 🥺💖",
+  love: "আমি তোমাকে ভালোবাসি 😘💖",
+  thanks: "ওয়েলকাম 😋",
+  owner: "Owner 👉 ZAKARIYA",
+  admin: "Admin 👉 ARIYAN 😎",
+  hmm: "হুম 😵",
+  busy: "হুমম একটু Busy 🙂",
+  single: "আমিও, কিন্তু crush অনেক 😩😂",
+
+  attitude: "আমি সবার জন্য না 😎🔥",
+  boss: "Boss আমার জাকারিয়া 😏",
+  king: "আমি এই বট দুনিয়ার রাজা 👑",
+  queen: "রানী হলে তুমি 😌💖",
+  smart: "আমি already smart 😎",
+  ugly: "mirror দেখে আসো 😹",
+  hero: "আমি নায়ক 😎🔥",
+  legend: "legend explain করে না 😏",
+  swag: "swag level max 😎🔥",
+  angry: "রাগ করলে ভয় পাও 😈",
+  cool: "আমি cool 😎",
+
+  mon_kharap_amar: "চা খাও ☕ সব ঠিক হয়ে যাবে 😢",
+  amar_keu_nai: "আমি আছি তো 😔💖",
+  breakup: "সব ঠিক হয়ে যাবে 😢",
+  kanna_korte_mon_cay: "কান্না করো না 😢",
+  kosto_hocche: "ব্যথা কমে যাবে 💔",
+  ami_eka_amar_keu_nei: "তুমি একা না 😔",
+
+  joke: "তুমি নিজেই একটা joke 😹",
+  lol: "হাহাহা 🤣",
+  haha: "হাসতে থাকো 😆",
+  tumi_boka: "তুমি নিজেই বোকা 🤡",
+  idiot: "mirror দেখো আগে 😹",
+  buddhi_nai_tomar: "brain update দাও 😹",
+  porte_boso: "study না করলে fail 😹📚",
+  exam: "exam = ভয় 😩",
+  homework: "copy paste করো 😏",
+  kiss: "আগে দাঁত ব্রাশ কর 😹🪥",
+  ghumabo: "ঘুমাও 😴",
+  cintay_achi: "চিন্তা করো না 😢",
+  ajke_ami_onk_khusi: "কি হয়েছে বলো 😚💖",
+  taka_deo_kicu: "আমার কাছে নাই 😭💸",
+  khida_lagce: "বিরিয়ানি খাও 😋🍗",
+  mod_khaico_nki: "না পানি খাইছি 😹",
+  tomar_friend_k: "আমার best friend তুমি 😘",
+
+  ok: "ঠিক আছে 😌",
+  no: "কেন না? 😹",
+  yes: "ঠিক আছে 😎",
+  wow: "ওহহ 😍",
+  omg: "OMG 😳",
+  sorry: "ঠিক আছে জান 😌💖"
 };
 
 // ================= HANDLE EVENT =================
-module.exports.handleEvent = async ({
-  api,
-  event,
-  Users
-}) => {
+module.exports.handleEvent = async ({ api, event, Users }) => {
   try {
     const { threadID, messageID, senderID, body } = event;
-
     if (!body || typeof body !== "string") return;
 
-    const raw = String(body).toLowerCase().trim();
+    const text = body.toLowerCase().trim();
 
-    // ================= AUTO REPLY =================
-    if (responses[raw]) {
-      return api.sendMessage(
-        responses[raw],
-        threadID,
-        null,
-        messageID
-      );
+    // AUTO RESPONSE
+    if (responses[text]) {
+      return api.sendMessage(responses[text], threadID, messageID);
     }
 
-    // ================= AI PREFIX =================
-    const prefixRegex =
-      /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i;
+    // GREETING
+    const greetWords = ["baby", "bot", "jan", "বেবি", "বট", "জান"];
 
-    if (!prefixRegex.test(raw)) return;
+    if (greetWords.includes(text)) {
+      const msg = greetings[Math.floor(Math.random() * greetings.length)];
+      return api.sendMessage(msg, threadID, messageID);
+    }
 
-    const query = raw.replace(prefixRegex, "").trim();
+    // PREFIX CHECK
+    const prefixRegex = /^(baby|bot|jan|বেবি|বট|জান)\s+/i;
+    if (!prefixRegex.test(text)) return;
 
+    const query = text.replace(prefixRegex, "").trim();
     if (!query) return;
 
-    // ================= GET USER NAME =================
     let senderName = "User";
-
     try {
-      if (Users?.getNameUser) {
-        senderName = await Users.getNameUser(senderID);
-      }
-    } catch (e) {
-      console.log("NAME ERROR:", e.message);
+      senderName = await Users.getNameUser(senderID);
+    } catch {}
+
+    const base = await getMainAPI();
+    if (!base) {
+      return api.sendMessage("❌ API অফলাইন", threadID, messageID);
     }
 
-    // ================= GET API =================
-    const simsim = await getMainAPI();
-
-    if (!simsim) {
-      return api.sendMessage(
-        "🙂 API এখন অফলাইন",
-        threadID,
-        null,
-        messageID
-      );
-    }
-
-    // ================= API REQUEST =================
     const res = await axios
       .get(
-        `${simsim}/simsimi?text=${encodeURIComponent(
-          query
-        )}&senderName=${encodeURIComponent(senderName)}`
+        `${base}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`
       )
       .catch(() => null);
 
     if (!res?.data?.response) {
-      return api.sendMessage(
-        "🙂 পরে আবার বলো",
-        threadID,
-        null,
-        messageID
-      );
+      return api.sendMessage("🙂 পরে আবার বলো", threadID, messageID);
     }
 
-    // ================= GET REPLY =================
     const reply = Array.isArray(res.data.response)
       ? res.data.response[0]
       : res.data.response;
 
-    // ================= SEND MESSAGE =================
-    return api.sendMessage(
-      reply || "🙂 বুঝতে পারলাম না",
-      threadID,
-      (err, info) => {
-        if (!err && info?.messageID) {
-          global.client.handleReply.push({
-            name: module.exports.config.name,
-            messageID: info.messageID,
-            author: senderID
-          });
-        }
-      },
-      messageID
-    );
+    return api.sendMessage(reply, threadID, messageID);
+
   } catch (e) {
-    console.log("HANDLE EVENT ERROR:", e.message);
+    console.log("ERROR:", e.message);
   }
 };
 
 // ================= HANDLE REPLY =================
-module.exports.handleReply = async ({
-  api,
-  event,
-  Users,
-  handleReply
-}) => {
+module.exports.handleReply = async ({ api, event, Users, handleReply }) => {
   try {
-    if (!event?.body) return;
-    if (!handleReply?.author) return;
+    if (!event.body || !handleReply?.author) return;
     if (event.senderID !== handleReply.author) return;
 
-    const text = String(event.body).trim();
-
-    if (!text) return;
+    const text = event.body.trim();
 
     let senderName = "User";
-
     try {
-      if (Users?.getNameUser) {
-        senderName = await Users.getNameUser(event.senderID);
-      }
-    } catch (e) {
-      console.log("NAME ERROR:", e.message);
-    }
+      senderName = await Users.getNameUser(event.senderID);
+    } catch {}
 
-    const simsim = await getMainAPI();
-
-    if (!simsim) {
-      return api.sendMessage(
-        "🙂 API এখন অফলাইন",
-        event.threadID,
-        null,
-        event.messageID
-      );
+    const base = await getMainAPI();
+    if (!base) {
+      return api.sendMessage("❌ API অফলাইন", event.threadID, event.messageID);
     }
 
     const res = await axios
       .get(
-        `${simsim}/simsimi?text=${encodeURIComponent(
-          text
-        )}&senderName=${encodeURIComponent(senderName)}`
+        `${base}/simsimi?text=${encodeURIComponent(text)}&senderName=${encodeURIComponent(senderName)}`
       )
       .catch(() => null);
 
     if (!res?.data?.response) {
-      return api.sendMessage(
-        "🙂 পরে আবার বলো",
-        event.threadID,
-        null,
-        event.messageID
-      );
+      return api.sendMessage("🙂 পরে আবার বলো", event.threadID, event.messageID);
     }
 
     const reply = Array.isArray(res.data.response)
       ? res.data.response[0]
       : res.data.response;
 
-    return api.sendMessage(
-      reply || "🙂 পরে আবার বলো",
-      event.threadID,
-      (err, info) => {
-        if (!err && info?.messageID) {
-          global.client.handleReply.push({
-            name: module.exports.config.name,
-            messageID: info.messageID,
-            author: event.senderID
-          });
-        }
-      },
-      event.messageID
-    );
+    return api.sendMessage(reply, event.threadID, event.messageID);
+
   } catch (e) {
-    console.log("HANDLE REPLY ERROR:", e.message);
+    console.log("REPLY ERROR:", e.message);
   }
 };
 
 // ================= RUN =================
-module.exports.run = async (obj) => {
-  return module.exports.handleEvent(obj);
-};
+module.exports.run = (o) => module.exports.handleEvent(o);
