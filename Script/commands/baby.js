@@ -1,4 +1,3 @@
-
 const axios = require("axios");
 
 // ================= API LINK =================
@@ -10,7 +9,7 @@ const getMainAPI = async () => {
   try {
     const res = await axios.get(apiList);
 
-    if (!res.data || !res.data.simsimi) {
+    if (!res?.data?.simsimi) {
       console.log("SIMSIMI API NOT FOUND");
       return null;
     }
@@ -29,7 +28,7 @@ global.client.handleReply = global.client.handleReply || [];
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "4.0.6",
+  version: "4.0.7",
   hasPermission: 0,
   credits: "ZAKARIYA",
   description: "Cute Baby Chat Bot",
@@ -42,15 +41,7 @@ module.exports.config = {
 // ================= GREETINGS =================
 const greetings = [
   "হুম জানু বলো 😘",
-  "জি বেবি 😚",
-  "কি খবর তোমার 💖",
-  "ডাকছো কেনো জান 😌",
-  "আমি আছি বলো 💕",
-  "হুম বলো জানু 🥺",
-  "Yes Baby 😘",
-  "কি করো জানু 😚",
-  "তোমার জন্য online আছি 😹",
-  "বলোনা কি হয়েছে 💖"
+  "ডাকছো কেনো জান 😌"
 ];
 
 // ================= AUTO RESPONSES =================
@@ -93,13 +84,13 @@ const responses = {
   খাবি: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
   khabi: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
   "তোমার নাম কি": "আমার নাম সিনথিয়া 💖",
-  "Tomar nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
+  "tomar nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
   "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 💖",
   "বাসা কোথায়": "তোমার মনের ভিতরে থাকি 😌🏠",
   "basa kothay": "তোমার হৃদয়ে থাকি 💘",
   "তুমি কে": "আমি তোমার favourite bot 😌💖",
   "tumi ke": "আমি cute baby bot 😚",
-  "ভালো আছো তো ": "আলহামদুলিল্লাহ ভালো আছি 🥰",
+  "ভালো আছো তো": "আলহামদুলিল্লাহ ভালো আছি 🥰",
   "valo aso": "হুম ভালো আছি জানু 😘",
   ghum: "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
   "mon kharap": "মন খারাপ কইরো না 🙂 চা খাও সব ঠিক 😌☕",
@@ -119,7 +110,11 @@ const responses = {
 };
 
 // ================= HANDLE EVENT =================
-module.exports.handleEvent = async ({ api, event, Users }) => {
+module.exports.handleEvent = async ({
+  api,
+  event,
+  Users
+}) => {
   try {
     const { threadID, messageID, senderID, body } = event;
 
@@ -138,9 +133,18 @@ module.exports.handleEvent = async ({ api, event, Users }) => {
     }
 
     // ================= GREETING =================
-    if (
-      ["baby", "bot", "bby", "jan", "xan", "বেবি", "জান", "বট"].includes(raw)
-    ) {
+    const greetWords = [
+      "baby",
+      "bot",
+      "bby",
+      "jan",
+      "xan",
+      "বেবি",
+      "জান",
+      "বট"
+    ];
+
+    if (greetWords.includes(raw)) {
       const msg =
         greetings[Math.floor(Math.random() * greetings.length)];
 
@@ -160,15 +164,13 @@ module.exports.handleEvent = async ({ api, event, Users }) => {
       );
     }
 
-    // ================= AI CHAT =================
+    // ================= AI PREFIX =================
     const prefixRegex =
       /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i;
 
     if (!prefixRegex.test(raw)) return;
 
-    const query = raw
-      .replace(prefixRegex, "")
-      .trim();
+    const query = raw.replace(prefixRegex, "").trim();
 
     if (!query) return;
 
@@ -176,7 +178,9 @@ module.exports.handleEvent = async ({ api, event, Users }) => {
     let senderName = "User";
 
     try {
-      senderName = await Users.getNameUser(senderID);
+      if (Users?.getNameUser) {
+        senderName = await Users.getNameUser(senderID);
+      }
     } catch (e) {
       console.log("NAME ERROR:", e.message);
     }
@@ -244,7 +248,7 @@ module.exports.handleReply = async ({
   handleReply
 }) => {
   try {
-    if (!event.body) return;
+    if (!event?.body) return;
     if (!handleReply?.author) return;
     if (event.senderID !== handleReply.author) return;
 
@@ -256,7 +260,9 @@ module.exports.handleReply = async ({
     let senderName = "User";
 
     try {
-      senderName = await Users.getNameUser(event.senderID);
+      if (Users?.getNameUser) {
+        senderName = await Users.getNameUser(event.senderID);
+      }
     } catch (e) {
       console.log("NAME ERROR:", e.message);
     }
