@@ -38,12 +38,6 @@ module.exports.config = {
   usePrefix: false
 };
 
-// ================= GREETINGS =================
-const greetings = [
-  "হুম জানু বলো 😘",
-  "ডাকছো কেনো জান 😌"
-];
-
 // ================= AUTO RESPONSES =================
 const responses = {
   hi: "এত হাই-হ্যালো কর ক্যান প্রিও..!😜🫵",
