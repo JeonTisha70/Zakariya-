@@ -1,13 +1,21 @@
+
 const axios = require("axios");
 
+// ================= API LINK =================
 const apiList =
   "https://raw.githubusercontent.com/ZAKARIYA/JIYEM-API/refs/heads/main/JIYEM-API.json";
 
-// ================= MAIN API =================
+// ================= GET MAIN API =================
 const getMainAPI = async () => {
   try {
     const res = await axios.get(apiList);
-    return res.data?.simsimi || null;
+
+    if (!res.data || !res.data.simsimi) {
+      console.log("SIMSIMI API NOT FOUND");
+      return null;
+    }
+
+    return res.data.simsimi;
   } catch (e) {
     console.log("API ERROR:", e.message);
     return null;
@@ -15,13 +23,13 @@ const getMainAPI = async () => {
 };
 
 // ================= SAFE GLOBAL =================
-global.client = global.client || {};
-global.client.handleReply = global.client.handleReply || [];
+if (!global.client) global.client = {};
+if (!global.client.handleReply) global.client.handleReply = [];
 
 // ================= CONFIG =================
 module.exports.config = {
   name: "autoreplybot",
-  version: "3.1.4",
+  version: "3.1.5",
   hasPermission: 0,
   credits: "ZAKARIYA",
   description: "Auto Reply + Simsimi Chat Bot",
@@ -30,17 +38,7 @@ module.exports.config = {
   cooldowns: 0
 };
 
-// ================= GREETINGS =================
-const greetings = [
-  "জি জানু 😘",
-  "ডাকছো কেনো বেবি 💖",
-  "হুম বলো জান 🥺",
-  "আমি আছি তোমার জন্য 😌",
-  "কি করো জানু 😚",
-  "Yes Baby 💕"
-];
-
-// ================= AUTO RESPONSES =================
+// ================= AUTO REPLIES =================
 const responses = {
   hi: "হাই জানু 😘",
   hello: "Hello Babu 💖",
@@ -57,11 +55,8 @@ const responses = {
   thanks: "Welcome 😘",
   "ki koro": "তোমার সাথে কথা বলতেছি 😌",
   pagol: "তুমিই পাগল 😹",
-  "kiss me": "উফফ লজ্জা লাগে 🙈",
   single: "Single আছি কিন্তু মনের ভিতরে ১৪ crush 😩😂",
   crush: "Crush খাইয়া লাভ নাই 😹",
-  gf: "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
-  bf: "BF না 🙂 PUBG খেলো 😹🎮",
   jaan: "এতো জান জান করো না 🙈💖",
   "mon kharap": "চা খাও 😌☕",
   ghum: "ঘুম আসে কিন্তু ফোন ছাড়তে পারি না 📱😩",
@@ -69,92 +64,182 @@ const responses = {
   "taka de": "আমি গরিব 😭 তুমি দাও 💸"
 };
 
-// ================= EVENT =================
-module.exports.handleEvent = async ({ api, event, Users }) => {
+// ================= HANDLE EVENT =================
+module.exports.handleEvent = async function ({
+  api,
+  event,
+  Users
+}) {
   try {
     const { threadID, messageID, body, senderID } = event;
-    if (!body) return;
 
-    const text = String(body).toLowerCase().trim();
+    // যদি message না থাকে
+    if (!body || typeof body !== "string") return;
 
-    global.client.handleReply = global.client.handleReply || [];
+    const text = body.toLowerCase().trim();
 
     // ================= AUTO REPLY =================
     if (responses[text]) {
-      return api.sendMessage(responses[text], threadID, messageID);
-    }
-
-    const base = await getMainAPI();
-    if (!base) return;
-
-    const senderName = await Users.getNameUser(senderID);
-
-    // ================= GREETING =================
-    if (["baby", "bot", "jan", "xan", "বেবি"].includes(text)) {
-      const msg = greetings[Math.floor(Math.random() * greetings.length)];
-      return api.sendMessage(msg, threadID, messageID);
-    }
-
-    // ================= AI CHAT =================
-    if (/^(baby|bot|jan|বেবি)\s+/i.test(text)) {
-      const query = text.replace(/^(baby|bot|jan|বেবি)\s+/i, "").trim();
-      if (!query) return;
-
-      const url = `${base}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`;
-
-      const res = await axios.get(url).catch(() => null);
-      if (!res?.data?.response) return;
-
-      const reply = Array.isArray(res.data.response)
-        ? res.data.response[0]
-        : res.data.response;
-
       return api.sendMessage(
-        reply || "🙂 বুঝতে পারিনি",
+        responses[text],
         threadID,
-        (err, info) => {
-          if (!err && info?.messageID) {
-            global.client.handleReply.push({
-              name: module.exports.config.name,
-              messageID: info.messageID,
-              author: senderID
-            });
-          }
-        },
         messageID
       );
     }
+
+    // ================= AI PREFIX CHECK =================
+    const prefixRegex = /^(baby|bot|jan|বেবি)\s+/i;
+
+    if (!prefixRegex.test(text)) return;
+
+    // ================= GET QUERY =================
+    const query = text.replace(prefixRegex, "").trim();
+
+    if (!query) return;
+
+    // ================= GET API =================
+    const base = await getMainAPI();
+
+    if (!base) {
+      return api.sendMessage(
+        "❌ API এখন কাজ করছে না",
+        threadID,
+        messageID
+      );
+    }
+
+    // ================= GET USER NAME =================
+    let senderName = "User";
+
+    try {
+      senderName = await Users.getNameUser(senderID);
+    } catch (e) {
+      console.log("NAME ERROR:", e.message);
+    }
+
+    // ================= API URL =================
+    const url = `${base}/simsimi?text=${encodeURIComponent(
+      query
+    )}&senderName=${encodeURIComponent(senderName)}`;
+
+    // ================= API REQUEST =================
+    const res = await axios.get(url).catch(() => null);
+
+    if (!res || !res.data) {
+      return api.sendMessage(
+        "❌ কোনো response পাওয়া যায়নি",
+        threadID,
+        messageID
+      );
+    }
+
+    // ================= GET REPLY =================
+    let reply;
+
+    if (Array.isArray(res.data.response)) {
+      reply = res.data.response[0];
+    } else {
+      reply = res.data.response;
+    }
+
+    // ================= SEND MESSAGE =================
+    return api.sendMessage(
+      reply || "🙂 বুঝতে পারিনি",
+      threadID,
+      (err, info) => {
+        if (err) {
+          console.log("SEND ERROR:", err.message);
+          return;
+        }
+
+        if (info && info.messageID) {
+          global.client.handleReply.push({
+            name: module.exports.config.name,
+            messageID: info.messageID,
+            author: senderID
+          });
+        }
+      },
+      messageID
+    );
   } catch (e) {
     console.log("HANDLE EVENT ERROR:", e.message);
   }
 };
 
 // ================= HANDLE REPLY =================
-module.exports.handleReply = async ({ api, event, handleReply, Users }) => {
+module.exports.handleReply = async function ({
+  api,
+  event,
+  handleReply,
+  Users
+}) {
   try {
     if (!event.body || !handleReply) return;
+
+    // শুধু যে user শুরু করেছে সে reply দিতে পারবে
     if (event.senderID !== handleReply.author) return;
 
     const text = event.body.trim();
+
+    if (!text) return;
+
+    // ================= GET API =================
     const base = await getMainAPI();
-    if (!base) return;
 
-    const senderName = await Users.getNameUser(event.senderID);
+    if (!base) {
+      return api.sendMessage(
+        "❌ API এখন কাজ করছে না",
+        event.threadID,
+        event.messageID
+      );
+    }
 
-    const url = `${base}/simsimi?text=${encodeURIComponent(text)}&senderName=${encodeURIComponent(senderName)}`;
+    // ================= GET USER NAME =================
+    let senderName = "User";
 
+    try {
+      senderName = await Users.getNameUser(event.senderID);
+    } catch (e) {
+      console.log("NAME ERROR:", e.message);
+    }
+
+    // ================= API URL =================
+    const url = `${base}/simsimi?text=${encodeURIComponent(
+      text
+    )}&senderName=${encodeURIComponent(senderName)}`;
+
+    // ================= API REQUEST =================
     const res = await axios.get(url).catch(() => null);
-    if (!res?.data?.response) return;
 
-    const reply = Array.isArray(res.data.response)
-      ? res.data.response[0]
-      : res.data.response;
+    if (!res || !res.data) {
+      return api.sendMessage(
+        "❌ কোনো response পাওয়া যায়নি",
+        event.threadID,
+        event.messageID
+      );
+    }
 
+    // ================= GET REPLY =================
+    let reply;
+
+    if (Array.isArray(res.data.response)) {
+      reply = res.data.response[0];
+    } else {
+      reply = res.data.response;
+    }
+
+    // ================= SEND MESSAGE =================
     return api.sendMessage(
       reply || "🙂 পরে আবার বলো",
       event.threadID,
       (err, info) => {
-        if (!err && info?.messageID) {
+        if (err) {
+          console.log("SEND ERROR:", err.message);
+          return;
+        }
+
+        if (info && info.messageID) {
           global.client.handleReply.push({
             name: module.exports.config.name,
             messageID: info.messageID,
@@ -170,6 +255,6 @@ module.exports.handleReply = async ({ api, event, handleReply, Users }) => {
 };
 
 // ================= RUN =================
-module.exports.run = async (o) => {
-  return module.exports.handleEvent(o);
+module.exports.run = async function (obj) {
+  return module.exports.handleEvent(obj);
 };
