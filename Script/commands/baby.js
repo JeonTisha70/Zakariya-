@@ -1,3 +1,4 @@
+
 const axios = require("axios");
 
 // ================= API LINK =================
@@ -28,7 +29,7 @@ global.client.handleReply = global.client.handleReply || [];
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "4.0.7",
+  version: "4.0.9",
   hasPermission: 0,
   credits: "ZAKARIYA",
   description: "Cute Baby Chat Bot",
@@ -47,60 +48,24 @@ const responses = {
   bye: "কই যাস 😒 আমাকে রেখে যাস না 🌚",
   by: "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাস..!🌚🌶️",
   বাই: "আবার আসবা কিন্তু 🥺💖",
-  "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো 😶👻😘",
-  "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
+  "miss you": "আমিও তোমাকে মিস করি 🥺",
   "love you": "আমিও তোমাকে ভালোবাসি 😘💖",
-  "লাভ ইউ": "আমিও তোমাকে ভালোবাসি 😘💖",
-  "i love you": "Love করলে সরাসরি জাকারিয়া বস কে বল জানু 😻🔥",
-  love: "Love করলে আগে recharge দাও 😹📲",
-  valobashi: "ভালোবাসা দিয়া কি হবে 🙂 recharge দাও 😹📲",
-  "kiss me": "তুমি পঁচা 😒 তোমাকে কিস দিবো না 🤭",
-  "kiss de": "কিস দিস না 😒 আগে দাঁত ব্রাশ করে আয় 🤬🪥",
-  ummmah: "এতো Ummmah কেনো জানু… কিছু বলবা? 😉",
   thanks: "এতো ধন্যবাদ না দিয়ে একটা বিরিয়ানি খাওয়াও 😋🍗",
-  owner: "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA JIYEM ☜",
-  admin: "He is ZAKARIYA 😘 সবাই Admin ARIYAN নামে চিনে ☺️",
+  owner: "𝐎𝐖𝐍𝐄𝐑 ☞ ZAKARIYA ☜",
+  admin: "Admin হলো ZAKARIYA 😘",
   jaan: "এতো জান জান করো না 🙈💖",
   babu: "হুম বাবু বলো 😚",
   pagol: "হুম 🙂 তোমার জন্যই পাগল 😹",
-  pagli: "পাগলি না 🙂 limited edition 😌✨",
   single: "Single আছি কিন্তু মনের ভিতরে ১৪ টা crush 😩😂",
-  crush: "Crush খাইয়া লাভ নাই 😹 reply দিবে না 💔",
+  crush: "Crush খাইয়া লাভ নাই 😹",
   gf: "GF লাগে? আগে shampoo দিয়া গোসল কর 😹🧼",
   bf: "BF না 🙂 PUBG খেলো 😹🎮",
   busy: "Busy না 🙂 নাটক করতেছি 😹🎭",
-  "online aso": "হুম 🙂 data শেষ হওয়ার আগ পর্যন্ত 😹📶",
-  "কি করো": "তোমার সাথে কথা বলতেছি 😌💖",
   "ki koro": "তোমারে reply দিতেছি জানু 📱😘",
-  "ki kro": "তোমারে reply দিতেছি 😌📱",
-  খাইছো: "হুম খাইছি 😋 তুমি খাইছো?",
-  khaiso: "না জানু 🙂 তোমার অপেক্ষায় আছি 🍽️😹",
-  খাবি: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
-  khabi: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
-  "তোমার নাম কি": "আমার নাম সিনথিয়া 💖",
-  "tomar nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
-  "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 💖",
-  "বাসা কোথায়": "তোমার মনের ভিতরে থাকি 😌🏠",
-  "basa kothay": "তোমার হৃদয়ে থাকি 💘",
-  "তুমি কে": "আমি তোমার favourite bot 😌💖",
-  "tumi ke": "আমি cute baby bot 😚",
-  "ভালো আছো তো": "আলহামদুলিল্লাহ ভালো আছি 🥰",
-  "valo aso": "হুম ভালো আছি জানু 😘",
   ghum: "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
-  "mon kharap": "মন খারাপ কইরো না 🙂 চা খাও সব ঠিক 😌☕",
+  "mon kharap": "মন খারাপ কইরো না 🙂 চা খাও ☕",
   "taka de": "আমিই গরিব 😭 উল্টা তুমি টাকা দাও 💸",
-  "amar keu nai": "আমি আছি তো 😌✨",
-  "tmi cute": "জানি 😌 আয়নায় রোজ দেখি 😹🪞",
-  assalamualaikum: "ওয়ালাইকুমুস সালাম ❤️‍🩹",
-  "eid mobarak": "ঈদ মোবারক 🌙✨ সেমাই খাইতে ভুলবা না 😋",
-  jakariya: "উনি এখন কাজে বিজি আছে 😘 কি বলবেন আমাকে বলতে পারেন..!",
-  "ami zakariya": "হ্যা বস 😎 কেমন আছেন..?☺️",
-  breakup: "চিন্তা করিস না 😎 নতুন জন পাইয়া যাবি 🔥",
-  hmm: "Hmmm কিসের হুমম জানু 🥵",
-  "rag korso": "রাগ করি নাই 🙂 শুধু block দেওয়ার চিন্তা করতেছি 😹",
-  "tmi koi": "আমি তোমার মনের ভিতরে আছি 😌💘",
-  "love korba": "আগে friendship 🙂 তারপর দেখা যাবে 😹💖",
-  tired: "Life এ tired 🙂 কিন্তু online এ active 😹📱"
+  hmm: "Hmmm কিসের হুমম জানু 🥵"
 };
 
 // ================= HANDLE EVENT =================
@@ -122,38 +87,6 @@ module.exports.handleEvent = async ({
         responses[raw],
         threadID,
         null,
-        messageID
-      );
-    }
-
-    // ================= GREETING =================
-    const greetWords = [
-      "baby",
-      "bot",
-      "bby",
-      "jan",
-      "xan",
-      "বেবি",
-      "জান",
-      "বট"
-    ];
-
-    if (greetWords.includes(raw)) {
-      const msg =
-        greetings[Math.floor(Math.random() * greetings.length)];
-
-      return api.sendMessage(
-        msg,
-        threadID,
-        (err, info) => {
-          if (!err && info?.messageID) {
-            global.client.handleReply.push({
-              name: module.exports.config.name,
-              messageID: info.messageID,
-              author: senderID
-            });
-          }
-        },
         messageID
       );
     }
@@ -250,7 +183,6 @@ module.exports.handleReply = async ({
 
     if (!text) return;
 
-    // ================= GET USER NAME =================
     let senderName = "User";
 
     try {
@@ -261,7 +193,6 @@ module.exports.handleReply = async ({
       console.log("NAME ERROR:", e.message);
     }
 
-    // ================= GET API =================
     const simsim = await getMainAPI();
 
     if (!simsim) {
@@ -273,7 +204,6 @@ module.exports.handleReply = async ({
       );
     }
 
-    // ================= API REQUEST =================
     const res = await axios
       .get(
         `${simsim}/simsimi?text=${encodeURIComponent(
@@ -291,12 +221,10 @@ module.exports.handleReply = async ({
       );
     }
 
-    // ================= GET REPLY =================
     const reply = Array.isArray(res.data.response)
       ? res.data.response[0]
       : res.data.response;
 
-    // ================= SEND MESSAGE =================
     return api.sendMessage(
       reply || "🙂 পরে আবার বলো",
       event.threadID,
