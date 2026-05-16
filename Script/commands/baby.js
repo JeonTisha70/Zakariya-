@@ -1,13 +1,20 @@
+
 const axios = require("axios");
 
+// ================= API LINK =================
 const apiList =
   "https://raw.githubusercontent.com/shahadat-sahu/SAHU-API/refs/heads/main/SAHU-API.json";
 
-// ================= MAIN API =================
+// ================= GET MAIN API =================
 const getMainAPI = async () => {
   try {
     const res = await axios.get(apiList);
-    if (!res.data || !res.data.simsimi) return null;
+
+    if (!res.data || !res.data.simsimi) {
+      console.log("SIMSIMI API NOT FOUND");
+      return null;
+    }
+
     return res.data.simsimi;
   } catch (e) {
     console.log("API ERROR:", e.message);
@@ -22,8 +29,8 @@ global.client.handleReply = global.client.handleReply || [];
 // ================= CONFIG =================
 module.exports.config = {
   name: "baby",
-  version: "4.0.5",
-  hasPermssion: 0,
+  version: "4.0.6",
+  hasPermission: 0,
   credits: "ZAKARIYA",
   description: "Cute Baby Chat Bot",
   commandCategory: "chat",
@@ -55,7 +62,7 @@ const responses = {
   bye: "কই যাস 😒 আমাকে রেখে যাস না 🌚",
   by: "কিরে তুই কই যাস কোন মেয়ের সাথে চিপায় যাস..!🌚🌶️",
   বাই: "আবার আসবা কিন্তু 🥺💖",
-  "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো😶👻😘",
+  "miss you": "আরেক বেডারে Miss না করে xan মেয়ে হলে বস জাকারিয়া রে হাঙ্গা করো 😶👻😘",
   "miss u too": "হুম আমি ও তোমাকে Miss করি... কিন্তু জাকারিয়া বস বেশি করে 😏💖",
   "love you": "আমিও তোমাকে ভালোবাসি 😘💖",
   "লাভ ইউ": "আমিও তোমাকে ভালোবাসি 😘💖",
@@ -85,21 +92,21 @@ const responses = {
   khaiso: "না জানু 🙂 তোমার অপেক্ষায় আছি 🍽️😹",
   খাবি: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
   khabi: "খাওয়াইবা? 😋 আমি কিন্তু বিরিয়ানি খাই 🍗",
-  "নাম কি": "আমার নাম সিনথিয়া 💖",
-  "nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
+  "তোমার নাম কি": "আমার নাম সিনথিয়া 💖",
+  "Tomar nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 😘",
   "tor nam ki": "MY NAME IS ─꯭─⃝‌‌𝐒𝐢𝐧𝐭𝐡𝐢𝐲𝐚 💖",
   "বাসা কোথায়": "তোমার মনের ভিতরে থাকি 😌🏠",
   "basa kothay": "তোমার হৃদয়ে থাকি 💘",
   "তুমি কে": "আমি তোমার favourite bot 😌💖",
   "tumi ke": "আমি cute baby bot 😚",
-  "ভালো আছো": "আলহামদুলিল্লাহ ভালো আছি 🥰",
+  "ভালো আছো তো ": "আলহামদুলিল্লাহ ভালো আছি 🥰",
   "valo aso": "হুম ভালো আছি জানু 😘",
   ghum: "ঘুমাইতে যাই কিন্তু ফোন নামাতে পারি না 😩📱",
   "mon kharap": "মন খারাপ কইরো না 🙂 চা খাও সব ঠিক 😌☕",
   "taka de": "আমিই গরিব 😭 উল্টা তুমি টাকা দাও 💸",
   "amar keu nai": "আমি আছি তো 😌✨",
   "tmi cute": "জানি 😌 আয়নায় রোজ দেখি 😹🪞",
-  "assalamualaikum": "ওয়ালাইকুমুস সালাম ❤️‍🩹",
+  assalamualaikum: "ওয়ালাইকুমুস সালাম ❤️‍🩹",
   "eid mobarak": "ঈদ মোবারক 🌙✨ সেমাই খাইতে ভুলবা না 😋",
   jakariya: "উনি এখন কাজে বিজি আছে 😘 কি বলবেন আমাকে বলতে পারেন..!",
   "ami zakariya": "হ্যা বস 😎 কেমন আছেন..?☺️",
@@ -111,119 +118,205 @@ const responses = {
   tired: "Life এ tired 🙂 কিন্তু online এ active 😹📱"
 };
 
-// ================= EVENT =================
+// ================= HANDLE EVENT =================
 module.exports.handleEvent = async ({ api, event, Users }) => {
   try {
     const { threadID, messageID, senderID, body } = event;
-    if (!body) return;
 
-    const raw = (body || "").toLowerCase().trim();
+    if (!body || typeof body !== "string") return;
 
-    global.client.handleReply = global.client.handleReply || [];
+    const raw = String(body).toLowerCase().trim();
 
-    // AUTO REPLY
+    // ================= AUTO REPLY =================
     if (responses[raw]) {
-      return api.sendMessage(responses[raw], threadID, messageID);
+      return api.sendMessage(
+        responses[raw],
+        threadID,
+        null,
+        messageID
+      );
     }
 
-    // GREETING
-    if (["baby", "bot", "bby", "jan", "xan", "বেবি", "জান", "বট"].includes(raw)) {
-      const msg = greetings[Math.floor(Math.random() * greetings.length)];
+    // ================= GREETING =================
+    if (
+      ["baby", "bot", "bby", "jan", "xan", "বেবি", "জান", "বট"].includes(raw)
+    ) {
+      const msg =
+        greetings[Math.floor(Math.random() * greetings.length)];
 
-      return api.sendMessage(msg, threadID, (err, info) => {
-        if (!err && info) {
+      return api.sendMessage(
+        msg,
+        threadID,
+        (err, info) => {
+          if (!err && info?.messageID) {
+            global.client.handleReply.push({
+              name: module.exports.config.name,
+              messageID: info.messageID,
+              author: senderID
+            });
+          }
+        },
+        messageID
+      );
+    }
+
+    // ================= AI CHAT =================
+    const prefixRegex =
+      /^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i;
+
+    if (!prefixRegex.test(raw)) return;
+
+    const query = raw
+      .replace(prefixRegex, "")
+      .trim();
+
+    if (!query) return;
+
+    // ================= GET USER NAME =================
+    let senderName = "User";
+
+    try {
+      senderName = await Users.getNameUser(senderID);
+    } catch (e) {
+      console.log("NAME ERROR:", e.message);
+    }
+
+    // ================= GET API =================
+    const simsim = await getMainAPI();
+
+    if (!simsim) {
+      return api.sendMessage(
+        "🙂 API এখন অফলাইন",
+        threadID,
+        null,
+        messageID
+      );
+    }
+
+    // ================= API REQUEST =================
+    const res = await axios
+      .get(
+        `${simsim}/simsimi?text=${encodeURIComponent(
+          query
+        )}&senderName=${encodeURIComponent(senderName)}`
+      )
+      .catch(() => null);
+
+    if (!res?.data?.response) {
+      return api.sendMessage(
+        "🙂 পরে আবার বলো",
+        threadID,
+        null,
+        messageID
+      );
+    }
+
+    // ================= GET REPLY =================
+    const reply = Array.isArray(res.data.response)
+      ? res.data.response[0]
+      : res.data.response;
+
+    // ================= SEND MESSAGE =================
+    return api.sendMessage(
+      reply || "🙂 বুঝতে পারলাম না",
+      threadID,
+      (err, info) => {
+        if (!err && info?.messageID) {
           global.client.handleReply.push({
             name: module.exports.config.name,
             messageID: info.messageID,
             author: senderID
           });
         }
-      }, messageID);
-    }
-
-    // AI CHAT
-    if (/^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i.test(raw)) {
-      const query = raw.replace(/^(baby|bot|bby|jan|xan|বেবি|বট|জান)\s+/i, "");
-      if (!query) return;
-
-      const senderName = await Users.getNameUser(senderID);
-      const simsim = await getMainAPI();
-
-      if (!simsim) {
-        return api.sendMessage("🙂 API এখন অফলাইন", threadID, messageID);
-      }
-
-      const res = await axios.get(
-        `${simsim}/simsimi?text=${encodeURIComponent(query)}&senderName=${encodeURIComponent(senderName)}`
-      ).catch(() => null);
-
-      if (!res || !res.data || !res.data.response) {
-        return api.sendMessage("🙂 পরে আবার বলো", threadID, messageID);
-      }
-
-      const reply = Array.isArray(res.data.response)
-        ? res.data.response[0]
-        : res.data.response;
-
-      return api.sendMessage(reply || "🙂 বুঝতে পারলাম না", threadID, (err, info) => {
-        if (!err && info) {
-          global.client.handleReply.push({
-            name: module.exports.config.name,
-            messageID: info.messageID,
-            author: senderID
-          });
-        }
-      }, messageID);
-    }
-
+      },
+      messageID
+    );
   } catch (e) {
     console.log("HANDLE EVENT ERROR:", e.message);
   }
 };
 
-// ================= REPLY =================
-module.exports.handleReply = async ({ api, event, Users, handleReply }) => {
+// ================= HANDLE REPLY =================
+module.exports.handleReply = async ({
+  api,
+  event,
+  Users,
+  handleReply
+}) => {
   try {
     if (!event.body) return;
-    if (!handleReply || !handleReply.author) return;
+    if (!handleReply?.author) return;
     if (event.senderID !== handleReply.author) return;
 
-    const text = (event.body || "").trim();
-    const senderName = await Users.getNameUser(event.senderID);
+    const text = String(event.body).trim();
+
+    if (!text) return;
+
+    // ================= GET USER NAME =================
+    let senderName = "User";
+
+    try {
+      senderName = await Users.getNameUser(event.senderID);
+    } catch (e) {
+      console.log("NAME ERROR:", e.message);
+    }
+
+    // ================= GET API =================
     const simsim = await getMainAPI();
 
     if (!simsim) {
-      return api.sendMessage("🙂 API এখন অফলাইন", event.threadID, event.messageID);
+      return api.sendMessage(
+        "🙂 API এখন অফলাইন",
+        event.threadID,
+        null,
+        event.messageID
+      );
     }
 
-    const res = await axios.get(
-      `${simsim}/simsimi?text=${encodeURIComponent(text)}&senderName=${encodeURIComponent(senderName)}`
-    ).catch(() => null);
+    // ================= API REQUEST =================
+    const res = await axios
+      .get(
+        `${simsim}/simsimi?text=${encodeURIComponent(
+          text
+        )}&senderName=${encodeURIComponent(senderName)}`
+      )
+      .catch(() => null);
 
-    if (!res || !res.data || !res.data.response) {
-      return api.sendMessage("🙂 পরে আবার বলো", event.threadID, event.messageID);
+    if (!res?.data?.response) {
+      return api.sendMessage(
+        "🙂 পরে আবার বলো",
+        event.threadID,
+        null,
+        event.messageID
+      );
     }
 
+    // ================= GET REPLY =================
     const reply = Array.isArray(res.data.response)
       ? res.data.response[0]
       : res.data.response;
 
-    return api.sendMessage(reply || "🙂 পরে আবার বলো", event.threadID, (err, info) => {
-      if (!err && info) {
-        global.client.handleReply.push({
-          name: module.exports.config.name,
-          messageID: info.messageID,
-          author: event.senderID
-        });
-      }
-    }, event.messageID);
-
+    // ================= SEND MESSAGE =================
+    return api.sendMessage(
+      reply || "🙂 পরে আবার বলো",
+      event.threadID,
+      (err, info) => {
+        if (!err && info?.messageID) {
+          global.client.handleReply.push({
+            name: module.exports.config.name,
+            messageID: info.messageID,
+            author: event.senderID
+          });
+        }
+      },
+      event.messageID
+    );
   } catch (e) {
     console.log("HANDLE REPLY ERROR:", e.message);
   }
 };
 
 // ================= RUN =================
-module.exports.run = async (o) => {
-  return module.exports.handleEvent(o);
+module.exports.run = async (obj) => {
+  return module.exports.handleEvent(obj);
 };
