@@ -1,18 +1,12 @@
 module.exports = {
   config: {
     name: "age",
-    version: "2.1",
-    author: "—͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
+    version: "2.2",
+    author: "—͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️ / JAKARIYA",
     hasPermission: 0,
     commandCategory: "utility",
     cooldowns: 5,
-    description: "Calculate age from birth date",
-    usage: "[DD/MM/YYYY]",
-    dependencies: {
-      "moment-timezone": "",
-      "fs-extra": "",
-      "axios": ""
-    }
+    description: "Calculate age from birth date (DD/MM/YYYY)"
   },
 
   run: async function ({ api, event, args }) {
@@ -20,90 +14,119 @@ module.exports = {
     const moment = require("moment-timezone");
     const axios = require("axios");
 
+    const threadID = event.threadID;
+    const senderID = event.senderID;
+
     try {
-      
+      // ================= INPUT CHECK =================
       if (!args[0]) {
-        return api.sendMessage("⚠️ Please provide your birth date in DD/MM/YYYY format\nExample: age 16/12/2006", event.threadID);
+        return api.sendMessage(
+          "⚠️ জন্ম তারিখ দিন (06/06/2004)\nউদাহরণ: age 06/06/2004",
+          threadID
+        );
       }
 
-      const input = args[0];
-      const dateParts = input.split('/');
-      
-      if (dateParts.length !== 3) {
-        return api.sendMessage("❌ Invalid date format. Please use DD/MM/YYYY", event.threadID);
+      const input = args[0].trim();
+      const parts = input.split("/");
+
+      if (parts.length !== 3) {
+        return api.sendMessage("❌ Format ভুল! 04/06/2004 ব্যবহার করুন", threadID);
       }
 
-      const day = parseInt(dateParts[0]);
-      const month = parseInt(dateParts[1]);
-      const year = parseInt(dateParts[2]);
+      let [day, month, year] = parts.map(Number);
 
-      
-      if (isNaN(day) || day < 1 || day > 31) {
-        return api.sendMessage("❌ Invalid day (1-31)", event.threadID);
-      }
-      if (isNaN(month) || month < 1 || month > 12) {
-        return api.sendMessage("❌ Invalid month (1-12)", event.threadID);
-      }
-      if (isNaN(year) || year < 1000 || year > new Date().getFullYear()) {
-        return api.sendMessage("❌ Invalid year", event.threadID);
+      if (
+        isNaN(day) || day < 1 || day > 31 ||
+        isNaN(month) || month < 1 || month > 12 ||
+        isNaN(year) || year < 1000 || year > new Date().getFullYear()
+      ) {
+        return api.sendMessage("❌ Invalid date দেওয়া হয়েছে", threadID);
       }
 
-      
-      const birthDate = moment.tz(`${year}-${month}-${day}`, "YYYY-MM-DD", "Asia/Dhaka");
+      const birthDate = moment.tz(
+        `${year}-${month}-${day}`,
+        "YYYY-MM-DD",
+        "Asia/Dhaka"
+      );
+
       const now = moment.tz("Asia/Dhaka");
-      
+
       if (birthDate.isAfter(now)) {
-        return api.sendMessage("❌ You can't be born in the future!", event.threadID);
+        return api.sendMessage("❌ ভবিষ্যতে জন্ম নেওয়া সম্ভব না 😄", threadID);
       }
 
       const duration = moment.duration(now.diff(birthDate));
-      
-      
+
       const years = duration.years();
       const months = duration.months();
       const days = duration.days();
+
       const totalMonths = years * 12 + months;
       const totalDays = Math.floor(duration.asDays());
       const totalHours = Math.floor(duration.asHours());
-      const totalMinutes = Math.floor(duration.asMinutes());
-      const totalSeconds = Math.floor(duration.asSeconds());
 
-      
-      const avatarPath = `${__dirname}/cache/${event.senderID}.jpg`;
-      const avatarUrl = `https://graph.facebook.com/${event.senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
-      
-      const response = await axios.get(avatarUrl, { responseType: 'stream' });
-      const writer = fs.createWriteStream(avatarPath);
-      response.data.pipe(writer);
-      
-      await new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-      });
+      // ================= CACHE SAFE =================
+      const cacheDir = __dirname + "/cache";
+      await fs.ensureDir(cacheDir);
 
-      
-      const message = {
-        body: `┏━━━━━━━━━━━━━━━━❂
-┃            🎂 𝗔𝗚𝗘 𝗖𝗔𝗟𝗖𝗨𝗟𝗔𝗧𝗢𝗥  🎂
+      const avatarPath = `${cacheDir}/${senderID}.jpg`;
+
+      const avatarUrl =
+        `https://graph.facebook.com/${senderID}/picture?width=512&height=512`;
+
+      let attachment;
+
+      try {
+        const response = await axios.get(avatarUrl, {
+          responseType: "arraybuffer",
+          timeout: 10000
+        });
+
+        await fs.writeFile(avatarPath, response.data);
+
+        attachment = fs.createReadStream(avatarPath);
+
+      } catch (e) {
+        console.log("Avatar error:", e.message);
+        attachment = null;
+      }
+
+      // ================= MESSAGE =================
+      const msg =
+`┏━━━━━━━━━━━━━━━━❂
+┃ 🎂 𝗔𝗚𝗘 𝗖𝗔𝗟𝗖𝗨𝗟𝗔𝗧𝗢𝗥 🎂
 ┣━━━━━━━━━━━━━━━━❂
-┃✦ 𝗗𝗮𝘁𝗲 𝗼𝗳 𝗕𝗶𝗿𝘁𝗵: ${day}/${month}/${year}
-┃✦ 𝗖𝘂𝗿𝗿𝗲𝗻𝘁 𝗔𝗴𝗲: ${years} years ${months} months
-┣━━━━[ 𝗗𝗘𝗧𝗔𝗜𝗟𝗦 ]━━━━❂
-┃❖ ${totalMonths} Months
-┃❖ ${totalDays} Days
-┃❖ ${totalHours} Hours
+┃ 📅 DOB: ${day}/${month}/${year}
+┃ 🎯 Age: ${years} years ${months} months
+┣━━━━[ DETAILS ]━━━━❂
+┃ 📌 Months: ${totalMonths}
+┃ 📌 Days: ${totalDays}
+┃ 📌 Hours: ${totalHours}
 ┣━━━━━━━━━━━━━━━━❂
-┃  𝗖𝗿𝗲𝗮𝘁𝗲𝗱 𝗯𝘆: ─꯭─⃝‌‌𝐙𝐚𝐤𝐚𝐫𝐢𝐲𝐚 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭
-┗━━━━━━━━━━━━━━━━❂`,
-        attachment: fs.createReadStream(avatarPath)
-      };
+┃ 👤 Created by: JAKARIYA
+┗━━━━━━━━━━━━━━━━❂`;
 
-      await api.sendMessage(message, event.threadID);
-      fs.unlinkSync(avatarPath);
+      await api.sendMessage(
+        attachment ? { body: msg, attachment } : { body: msg },
+        threadID
+      );
+
+      // ================= CLEANUP SAFE =================
+      try {
+        if (fs.existsSync(avatarPath)) {
+          fs.unlinkSync(avatarPath);
+        }
+      } catch (e) {
+        console.log("Cleanup error:", e.message);
+      }
 
     } catch (error) {
-      console.error("Error in age command:", error);
-      api.sendMessage("❌ An error occurred while processing your request", event.threadID);
+      console.log("AGE COMMAND ERROR:", error.message);
+
+      return api.sendMessage(
+        "❌ কিছু সমস্যা হয়েছে, পরে আবার চেষ্টা করুন",
+        event.threadID
+      );
     }
   }
 };
