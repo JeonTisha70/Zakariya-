@@ -1,71 +1,226 @@
-const axios = require('axios');
-const fs = require('fs');
+
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
 
 module.exports = {
   config: {
     name: "4k",
-    version: "1.0.0",
+    version: "3.1.0",
     hasPermssion: 0,
-    credits: "ZAKARIYA", //don't change credit
-    description: "Enhance Photo - Reply with image to upscale",
-    commandCategory: "Image Editing Tools",
-    usages: "Reply to an image",
-    cooldowns: 5
-  },
-
-  handleEvent: async ({ api, event }) => {
-    const { body, messageReply, threadID, messageID } = event;
-    if (body?.toLowerCase().trim() === "4k") {
-      if (!messageReply?.attachments?.length)
-        return api.sendMessage("📸 Please reply to an image!", threadID, messageID);
-
-      await processImage(api, threadID, messageID, messageReply);
+    credits: "JAKARIYA",
+    description: "Enhance image into 4K quality",
+    commandCategory: "Image Tools",
+    usages: "Reply to an image with 4k",
+    cooldowns: 5,
+    usePrefix: true,
+    dependencies: {
+      axios: "",
+      "fs-extra": ""
     }
   },
 
-  run: async ({ api, event }) => {
-    const { threadID, messageID, messageReply } = event;
-    if (!messageReply?.attachments?.length)
-      return api.sendMessage("📸 Reply to an image to enhance!", threadID, messageID);
+  handleEvent: async function ({ api, event }) {
+    try {
+      const { body, messageReply } = event;
 
-    await processImage(api, threadID, messageID, messageReply);
+      if (!body) return;
+
+      const text = body.toLowerCase().trim();
+
+      if (text !== "4k") return;
+
+      if (
+        !messageReply ||
+        !messageReply.attachments ||
+        !messageReply.attachments[0]
+      ) {
+        return api.sendMessage(
+          "📸 Please reply to a photo!",
+          event.threadID,
+          event.messageID
+        );
+      }
+
+      const attachment = messageReply.attachments[0];
+
+      if (attachment.type !== "photo") {
+        return api.sendMessage(
+          "❎ Only photo replies are supported!",
+          event.threadID,
+          event.messageID
+        );
+      }
+
+      return enhanceImage(
+        api,
+        event.threadID,
+        event.messageID,
+        attachment.url
+      );
+
+    } catch (err) {
+      console.log("HANDLE ERROR:", err.message);
+
+      return api.sendMessage(
+        "❎ Failed to process image!",
+        event.threadID,
+        event.messageID
+      );
+    }
+  },
+
+  run: async function ({ api, event }) {
+    try {
+      const { messageReply } = event;
+
+      if (
+        !messageReply ||
+        !messageReply.attachments ||
+        !messageReply.attachments[0]
+      ) {
+        return api.sendMessage(
+          "📸 Reply to a photo first!",
+          event.threadID,
+          event.messageID
+        );
+      }
+
+      const attachment = messageReply.attachments[0];
+
+      if (attachment.type !== "photo") {
+        return api.sendMessage(
+          "❎ Invalid file type!",
+          event.threadID,
+          event.messageID
+        );
+      }
+
+      return enhanceImage(
+        api,
+        event.threadID,
+        event.messageID,
+        attachment.url
+      );
+
+    } catch (err) {
+      console.log("RUN ERROR:", err.message);
+
+      return api.sendMessage(
+        "❎ Failed to process image!",
+        event.threadID,
+        event.messageID
+      );
+    }
   }
 };
 
-async function processImage(api, threadID, messageID, messageReply) {
-  const tempPath = __dirname + "/cache/4k.jpg";
-  const img = messageReply.attachments[0].url;
+async function enhanceImage(api, threadID, messageID, imageUrl) {
+
+  let waitMsg;
 
   try {
-    const configUrl =
+
+    // CACHE FOLDER
+    const cacheDir = path.join(__dirname, "cache");
+
+    if (!fs.existsSync(cacheDir)) {
+      fs.mkdirSync(cacheDir, { recursive: true });
+    }
+
+    // FILE PATH
+    const filePath = path.join(
+      cacheDir,
+      `4k_${Date.now()}.jpg`
+    );
+
+    // WAIT MESSAGE
+    waitMsg = await api.sendMessage(
+      "⏳ Enhancing image into 4K...\nPlease wait.",
+      threadID
+    );
+
+    // API CONFIG LINK
+    const configURL =
       "https://raw.githubusercontent.com/shahadat-sahu/SAHU-API/refs/heads/main/SAHU-API.json";
 
-    const apiConfig = await axios.get(configUrl);
-    const apiUrl = apiConfig.data["4k"];
+    // GET CONFIG
+    const configRes = await axios.get(configURL, {
+      timeout: 15000
+    });
 
-    const wait = await api.sendMessage("⏳ Enhancing your photo in 4K...", threadID);
+    const apiUrl = configRes?.data?.["4k"];
 
-    const enhanceUrl = `${apiUrl}?imageUrl=${encodeURIComponent(img)}`;
-    const res = await axios.get(enhanceUrl);
-    const resultImg = res.data?.result;
+    if (!apiUrl || typeof apiUrl !== "string") {
+      throw new Error("API URL Missing");
+    }
 
-    if (!resultImg) throw new Error("No result");
+    // MAIN API CALL
+    const apiRequest =
+      `${apiUrl}?imageUrl=${encodeURIComponent(imageUrl)}`;
 
-    const buffer = (await axios.get(resultImg, { responseType: "arraybuffer" })).data;
-    fs.writeFileSync(tempPath, Buffer.from(buffer, "binary"));
+    const apiRes = await axios.get(apiRequest, {
+      timeout: 120000
+    });
 
-    api.sendMessage(
+    // RESULT URL
+    const resultURL =
+      apiRes?.data?.result ||
+      apiRes?.data?.image ||
+      apiRes?.data?.url;
+
+    if (!resultURL) {
+      throw new Error("No image returned");
+    }
+
+    // DOWNLOAD IMAGE
+    const imageRes = await axios.get(resultURL, {
+      responseType: "arraybuffer",
+      timeout: 120000
+    });
+
+    // SAVE IMAGE
+    fs.writeFileSync(filePath, imageRes.data);
+
+    // SEND RESULT
+    await api.sendMessage(
       {
-        body: "✔️ 4K Enhance Successful!",
-        attachment: fs.createReadStream(tempPath)
+        body: "✅ 4K Image Enhanced Successfully!",
+        attachment: fs.createReadStream(filePath)
       },
       threadID,
-      () => fs.unlinkSync(tempPath),
+      () => {
+        try {
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+          }
+        } catch (e) {
+          console.log("DELETE ERROR:", e.message);
+        }
+      },
       messageID
     );
 
-    api.unsendMessage(wait.messageID);
-  } catch (e) {
-    api.sendMessage("❌ API Error! Boss SAHU ke message din!", threadID, messageID);
+    // REMOVE WAIT MESSAGE
+    if (waitMsg?.messageID) {
+      api.unsendMessage(waitMsg.messageID);
+    }
+
+  } catch (err) {
+
+    console.log("4K ERROR:", err.message);
+
+    // REMOVE WAIT MESSAGE
+    try {
+      if (waitMsg?.messageID) {
+        api.unsendMessage(waitMsg.messageID);
+      }
+    } catch (_) {}
+
+    return api.sendMessage(
+      "❎ 4K Enhance Failed!\nTry again later.",
+      threadID,
+      messageID
+    );
   }
 }
