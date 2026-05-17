@@ -1,40 +1,98 @@
-module.exports = {
- config:{
- name: "autodl",
- version: "0.0.2",
- hasPermssion: 0,
- credits: "ZAKARIYA",
- description: "auto video download",
- commandCategory: "user",
- usages: "",
- cooldowns: 5,
-},
-run: async function({ api, event, args }) {},
-handleEvent: async function ({ api, event, args }) {
- const axios = require("axios")
- const request = require("request")
- const fs = require("fs-extra")
- const content = event.body ? event.body : '';
- const body = content.toLowerCase();
- const { alldown } = require("shaon-videos-downloader")
- if (body.startsWith("https://")) {
- api.setMessageReaction("⚠️", event.messageID, (err) => {}, true);
-const data = await alldown(content);
- console.log(data)
- let Shaon = data.url;
- api.setMessageReaction("☢️", event.messageID, (err) => {}, true);
- const video = (await axios.get(Shaon, {
- responseType: "arraybuffer",
- })).data;
- fs.writeFileSync(__dirname + "/cache/auto.mp4", Buffer.from(video, "utf-8"))
 
- return api.sendMessage({
- body: `🔥🚀 𝐙𝐚𝐤𝐚𝐫𝐢𝐲𝐚 𝐂𝐡𝐚𝐭 𝐁𝐨𝐭🔥💻 
-📥⚡𝗔𝘂𝘁𝗼 𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱𝗲𝗿⚡📂
-🎬 𝐄𝐧𝐣𝐨𝐲 𝐭𝐡𝐞 𝐕𝐢𝐝𝐞𝐨 🎀`,
- attachment: fs.createReadStream(__dirname + "/cache/auto.mp4")
+module.exports.config = {
+  name: "art",
+  version: "1.0.1",
+  hasPermission: 0,
+  credits: "CYBER BOT TEAM",
+  description: "Apply AI art style (anime)",
+  commandCategory: "editing",
+  usages: "reply to an image",
+  cooldowns: 5,
+  usePrefix: true
+};
 
- }, event.threadID, event.messageID);
- }
-}
-}
+module.exports.run = async ({ api, event }) => {
+  const axios = require("axios");
+  const fs = require("fs-extra");
+  const path = require("path");
+  const FormData = require("form-data");
+
+  const { messageReply, threadID, messageID } = event;
+
+  const cacheDir = path.join(__dirname, "cache");
+  const filePath = path.join(cacheDir, "artify.jpg");
+
+  try {
+    await fs.ensureDir(cacheDir);
+
+    // ================= CHECK IMAGE =================
+    if (
+      !messageReply ||
+      !messageReply.attachments ||
+      messageReply.attachments.length === 0
+    ) {
+      return api.sendMessage(
+        "❌ Please reply to an image.",
+        threadID,
+        messageID
+      );
+    }
+
+    const url = messageReply.attachments[0].url;
+    if (!url) {
+      return api.sendMessage(
+        "❌ Invalid image URL.",
+        threadID,
+        messageID
+      );
+    }
+
+    // ================= DOWNLOAD IMAGE =================
+    const response = await axios.get(url, {
+      responseType: "arraybuffer",
+      timeout: 15000
+    });
+
+    fs.writeFileSync(filePath, Buffer.from(response.data));
+
+    // ================= FORM DATA =================
+    const form = new FormData();
+    form.append("image", fs.createReadStream(filePath));
+
+    // ================= API REQUEST =================
+    const apiRes = await axios.post(
+      "https://art-api-97wn.onrender.com/artify?style=anime",
+      form,
+      {
+        headers: form.getHeaders(),
+        responseType: "arraybuffer",
+        timeout: 60000
+      }
+    );
+
+    fs.writeFileSync(filePath, Buffer.from(apiRes.data));
+
+    return api.sendMessage(
+      {
+        body: "🎨 AI art applied successfully!",
+        attachment: fs.createReadStream(filePath)
+      },
+      threadID,
+      () => {
+        try {
+          if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        } catch {}
+      },
+      messageID
+    );
+
+  } catch (err) {
+    console.log("ART ERROR:", err.message);
+
+    return api.sendMessage(
+      "❌ AI art failed. Please try again later.",
+      threadID,
+      messageID
+    );
+  }
+};
