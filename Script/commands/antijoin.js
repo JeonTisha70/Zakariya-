@@ -1,22 +1,59 @@
+
 module.exports.config = {
-    name: "antijoin",
-    version: "1.0.0",
-    credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
-    hasPermssion: 1,
-    description: "Turn off antijoin",
-    usages: "antijoin on/off",
-    commandCategory: "system",
-    cooldowns: 0
+  name: "antijoin",
+  version: "1.0.1",
+  credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
+  hasPermission: 1,
+  description: "Turn on/off anti join",
+  commandCategory: "system",
+  usages: "antijoin on/off",
+  cooldowns: 0
 };
 
-module.exports.run = async({ api, event, Threads}) => {
-    const info = await api.getThreadInfo(event.threadID);
-    if (!info.adminIDs.some(item => item.id == api.getCurrentUserID())) 
-      return api.sendMessage('[ 𝐀𝐍𝐓𝐈 𝐉𝐎𝐈𝐍 ] » 𝗡𝗲𝗲𝗱 𝗴𝗿𝗼𝘂𝗽 𝗮𝗱𝗺𝗶𝗻 𝗽𝗲𝗿𝗺𝗶𝘀𝘀𝗶𝗼𝗻𝘀, 𝗽𝗹𝗲𝗮𝘀𝗲 𝗮𝗱𝗱 𝗮𝗻𝗱 𝘁𝗿𝘆 𝗮𝗴𝗮𝗶𝗻', event.threadID, event.messageID);
-    const data = (await Threads.getData(event.threadID)).data || {};
-    if (typeof data.newMember == "undefined" || data.newMember == false) data.newMember = true;
-    else data.newMember = false;
-    await Threads.setData(event.threadID, { data });
-      global.data.threadData.set(parseInt(event.threadID), data);
-    return api.sendMessage(`[ 𝐀𝐍𝐓𝐈 𝐉𝐎𝐈𝐍 ] » 𝗜𝗺𝗽𝗹𝗲𝗺𝗲𝗻𝘁 ${(data.newMember == true) ? "𝗢𝗻" : "𝗢𝗳𝗳"} 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹 𝗔𝗻𝘁𝗶 𝗝𝗼𝗶𝗻 ✅`, event.threadID, event.messageID);
-}
+module.exports.run = async ({ api, event, Threads }) => {
+  try {
+    const threadID = event.threadID;
+
+    const info = await api.getThreadInfo(threadID);
+
+    // ================= ADMIN CHECK =================
+    const isAdmin = (info.adminIDs || []).some(
+      item => String(item.id) === String(api.getCurrentUserID())
+    );
+
+    if (!isAdmin) {
+      return api.sendMessage(
+        "[ ANTI JOIN ] » Need group admin permission, please add bot as admin",
+        threadID,
+        event.messageID
+      );
+    }
+
+    // ================= THREAD DATA =================
+    const data = (await Threads.getData(threadID))?.data || {};
+
+    // toggle logic safe
+    data.newMember = !(data.newMember === true);
+
+    await Threads.setData(threadID, { data });
+
+    if (global.data && global.data.threadData) {
+      global.data.threadData.set(String(threadID), data);
+    }
+
+    return api.sendMessage(
+      `[ ANTI JOIN ] » Anti Join ${(data.newMember ? "ON" : "OFF")} Successfully ✅`,
+      threadID,
+      event.messageID
+    );
+
+  } catch (err) {
+    console.log("ANTIJOIN ERROR:", err.message);
+
+    return api.sendMessage(
+      "❎ Something went wrong in antijoin system",
+      event.threadID,
+      event.messageID
+    );
+  }
+};
